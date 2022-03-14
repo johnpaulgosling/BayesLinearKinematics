@@ -1,10 +1,9 @@
-#' An S4 class to represent a Bayes linear object.
+#' An S4 class to represent data for a Bayes linear adjustment.
 #'
 #' @slot name A string for the name of the variable collection.
 #' @slot varnames A character vector of variable names.
-#' @slot expectation A numeric vector of expectations.
-#' @slot covariance A numeric matrix of covariances.
-# Validity check for class 'bl'
+#' @slot values A numeric vector of observed values.
+# Validity check for class 'bl_data'
 check_bl_data <- function(object) {
   # Somewhere to store error messages
   errors <- character()

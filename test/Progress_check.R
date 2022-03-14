@@ -41,3 +41,12 @@ y
 x_adj_y <- bl_adjust(x,y)
 x_adj_y
 plot(x_adj_y)
+
+y <- bl_data(name = 'Data',
+             varnames = c('A'),
+             values = c(-200))
+y
+
+x_adj_y <- bl_adjust(x,y)
+x_adj_y
+plot(x_adj_y)
