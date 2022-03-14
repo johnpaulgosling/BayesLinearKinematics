@@ -20,4 +20,24 @@ odata <- bl_data(name = 'Data',
                  values = c(1,2,10))
 
 odata
+typeof(odata)
+class(odata)
 plot(odata)
+
+# Checking simple BL adjustment adjustment
+x <- bl(name = 'All',
+        varnames = c('A','B','C'),
+        expectation = c(0,1,0),
+        covariance = matrix(runif(9),3,3))
+diag(x@covariance) <- rep(1,3)
+x@covariance <- x@covariance %*% t(x@covariance)
+x
+
+y <- bl_data(name = 'Data',
+             varnames = c('B','C'),
+             values = c(2,2))
+y
+
+x_adj_y <- bl_adjust(x,y)
+x_adj_y
+plot(x_adj_y)
