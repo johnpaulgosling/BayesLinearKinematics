@@ -50,3 +50,24 @@ y
 x_adj_y <- bl_adjust(x,y)
 x_adj_y
 plot(x_adj_y)
+
+# Checking BLK adjustment adjustment
+x <- bl(name = 'All',
+        varnames = c('A','B','C'),
+        expectation = c(0,1,0),
+        covariance = matrix(runif(9),3,3))
+diag(x@covariance) <- rep(1,3)
+x@covariance <- x@covariance %*% t(x@covariance)
+x
+
+y <- bl(name = 'Data',
+        varnames = c('B','C'),
+        expectation = c(5,0),
+        covariance = matrix(runif(4)/4,2,2))
+diag(y@covariance) <- rep(0.5,2)
+y@covariance <- y@covariance %*% t(y@covariance)
+y
+
+x_adj_y <- bl_adjust(x,y)
+x_adj_y
+plot(x_adj_y)
