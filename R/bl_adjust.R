@@ -25,7 +25,18 @@ bl_adjust <- function(x,
   }
   
   # Return any errors
-  if (length(errors) > 0) return(errors)
+  if (length(errors) > 0) stop(paste(errors,
+                                     '\n  '))
+  
+  # Check that all the y variables are in x
+  if(!(all(y@varnames %in% x@varnames))){
+    msg <- paste0("The variables to be adjusted are not in x.")
+    errors <- c(errors, msg)
+  }
+  
+  # Return any errors
+  if (length(errors) > 0) stop(paste(errors,
+                                     '\n  '))
   
   # Simple Bayes linear update if y is of class bl_data
   if (class(y)[1] == 'bl_data'){
