@@ -32,6 +32,7 @@ x <- bl(name = 'All',
 diag(x@covariance) <- rep(1,3)
 x@covariance <- x@covariance %*% t(x@covariance)
 x
+bl_subset(x, c('C','A'))
 
 y <- bl_data(name = 'Data',
              varnames = c('B','C'),

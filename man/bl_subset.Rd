@@ -1,29 +1,29 @@
-\name{bl_adjust}
-\alias{bl_adjust}
+\name{bl_subset}
+\alias{bl_subset}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Bayes linear kinematics adjustment
+Bayes linear object subset
 }
 \description{
-Bayes linear kinematics adjustment
+Extract variables from a Bayes linear object
 }
 \usage{
-bl_adjust(x, y)
+bl_subset(x, names)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-bl object to be adjusted.
+bl object to be subsetted.
 }
-  \item{y}{
-bl or bl_data object to adjust by.
+  \item{names}{
+variable names to be extracted.
 }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-Adjusted bl object.
+Extracted bl object.
 }
 \references{
 %% ~put references to the literature/web site here ~

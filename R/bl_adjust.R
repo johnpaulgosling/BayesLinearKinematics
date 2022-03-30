@@ -1,6 +1,6 @@
 #' Bayes linear kinematic adjustment
 #'
-#' @param x bl object to by adjusted.
+#' @param x bl object to be adjusted.
 #' @param y bl or bl_data object to adjust by.
 #'
 #' @return Adjusted bl object.
@@ -10,7 +10,8 @@ bl_adjust <- function(x,
   # Simple Bayes linear update if y is of class bl_data
   if (class(y)[1] == 'bl_data'){
     # Pick out mean and covariance from x that corresponds with y
-    x_indices <- which(x@varnames %in% y@varnames)
+    x_indices <- sapply(y@varnames,
+                        function(x_names) which(x@varnames %in% x_names))
     y_expectation <- x@expectation[x_indices]
     y_variance <- x@covariance[x_indices, x_indices]
     xy_covariance <- x@covariance[, x_indices]
