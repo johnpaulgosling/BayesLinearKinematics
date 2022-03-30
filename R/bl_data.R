@@ -42,7 +42,7 @@ setMethod('show',
           function(object) {
             cat(object@name, '\n')
             cat('Variable names: ', object@varnames, '\n')
-            cat('Observed values:', object@values)
+            cat('Observed values:', round(object@values, 2))
           })
 
 # Plot method for class ('plot')

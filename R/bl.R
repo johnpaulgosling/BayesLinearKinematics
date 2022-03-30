@@ -72,9 +72,9 @@ setMethod('show',
           function(object) {
             cat(object@name, '\n')
             cat('Variable names:', object@varnames, '\n')
-            cat('Expectation:   ', object@expectation, '\n')
+            cat('Expectation:   ', round(object@expectation, 2), '\n')
             cat('Covariance:\n')
-            prmatrix(object@covariance,
+            prmatrix(round(object@covariance, 2),
                      rowlab = object@varnames,
                      collab = object@varnames)
           })

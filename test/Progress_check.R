@@ -41,6 +41,7 @@ y
 x_adj_y <- bl_adjust(x,y)
 x_adj_y
 plot(x_adj_y)
+resolution(x,x_adj_y)
 
 y <- bl_data(name = 'Data',
              varnames = c('A'),
@@ -50,6 +51,7 @@ y
 x_adj_y <- bl_adjust(x,y)
 x_adj_y
 plot(x_adj_y)
+resolution(x,x_adj_y)
 
 # Checking BLK adjustment adjustment
 x <- bl(name = 'All',
@@ -71,3 +73,4 @@ y
 x_adj_y <- bl_adjust(x,y)
 x_adj_y
 plot(x_adj_y)
+resolution(x,x_adj_y)
