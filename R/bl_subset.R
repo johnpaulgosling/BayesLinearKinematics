@@ -7,6 +7,9 @@
 #' @export
 bl_subset <- function(x,
                       names){
+  # Somewhere to store error messages
+  errors <- character()
+  
   # Check x is a BL object
   if (class(x)[1] != 'bl'){
     msg <- paste0("The class of x is ",
@@ -15,11 +18,17 @@ bl_subset <- function(x,
     errors <- c(errors, msg)
   }
   
+  # Return any errors
+  if (length(errors) > 0) return(errors)
+  
   # Check the names are in x
   if(!(all(names %in% x@varnames))){
-    msg <- paste0("The variables to extract are not in x.")
+    msg <- paste0("The variables to be extracted are not in x.")
     errors <- c(errors, msg)
   }
+  
+  # Return any errors
+  if (length(errors) > 0) return(errors)
   
   # Pick out mean and covariance from x that corresponds 
   # with variables in names.

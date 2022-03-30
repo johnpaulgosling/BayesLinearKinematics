@@ -41,8 +41,11 @@ setMethod('show',
           'bl_data',
           function(object) {
             cat(object@name, '\n')
-            cat('Variable names: ', object@varnames, '\n')
-            cat('Observed values:', round(object@values, 2))
+            cat('Observed values:\n')
+            prmatrix(matrix(round(object@values, 2),
+                            length(object@varnames), 1),
+                     rowlab = object@varnames,
+                     collab = ' ')
           })
 
 # Plot method for class ('plot')

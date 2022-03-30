@@ -71,9 +71,12 @@ setMethod('show',
           'bl',
           function(object) {
             cat(object@name, '\n')
-            cat('Variable names:', object@varnames, '\n')
-            cat('Expectation:   ', round(object@expectation, 2), '\n')
-            cat('Covariance:\n')
+            cat('\nExpectation:\n')
+            prmatrix(matrix(round(object@expectation, 2),
+                            length(object@varnames), 1),
+                     rowlab = object@varnames,
+                     collab = ' ')
+            cat('\nCovariance:\n\n')
             prmatrix(round(object@covariance, 2),
                      rowlab = object@varnames,
                      collab = object@varnames)

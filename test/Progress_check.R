@@ -75,3 +75,14 @@ x_adj_y <- bl_adjust(x,y)
 x_adj_y
 plot(x_adj_y)
 resolution(x,x_adj_y)
+
+# Some error checking
+resolution(x,1)
+resolution(x,'a')
+resolution(matrix(0,2,3),x)
+bl_adjust(x,1)
+bl_adjust(x,'a')
+bl_adjust(matrix(0,2,3),x)
+bl_subset(x,1)
+bl_subset(x,'a')
+bl_subset(matrix(0,2,3),x)

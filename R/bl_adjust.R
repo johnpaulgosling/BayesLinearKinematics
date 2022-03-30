@@ -7,6 +7,26 @@
 #' @export
 bl_adjust <- function(x,
                       y){
+  # Somewhere to store error messages
+  errors <- character()
+  
+  # Check x and y are BL objects
+  if (class(x)[1] != 'bl'){
+    msg <- paste0("The class of x is ",
+                  class(x)[1],
+                  ".  It should be bl.")
+    errors <- c(errors, msg)
+  }
+  if (class(y)[1] != 'bl' & class(y)[1] != 'bl_data'){
+    msg <- paste0("The class of y is ",
+                  class(y)[1],
+                  ".  It should be bl or bl_data.")
+    errors <- c(errors, msg)
+  }
+  
+  # Return any errors
+  if (length(errors) > 0) return(errors)
+  
   # Simple Bayes linear update if y is of class bl_data
   if (class(y)[1] == 'bl_data'){
     # Pick out mean and covariance from x that corresponds with y
