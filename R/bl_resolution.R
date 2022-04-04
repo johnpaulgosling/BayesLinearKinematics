@@ -5,7 +5,7 @@
 #'
 #' @return Vector of resolutions on the [0,1] scale.
 #' @export
-resolution <- function(x,
+bl_resolution <- function(x,
                        y){
   # Somewhere to store error messages
   errors <- character()
@@ -37,7 +37,5 @@ resolution <- function(x,
   if (length(errors) > 0) return(errors)
   
   # Compute the resolution vector
-  resolution <- 1 - diag(y@covariance)/diag(x@covariance)
-  
-  return(resolution)
+  return(1 - diag(y@covariance)/diag(x@covariance))
 }

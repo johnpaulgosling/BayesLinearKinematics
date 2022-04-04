@@ -1,5 +1,5 @@
-\name{resolution}
-\alias{resolution}
+\name{bl_resolution}
+\alias{bl_resolution}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 Resolution
@@ -8,7 +8,7 @@ Resolution
 Resolution of variance achieved through Bayes linear (kinematics) adjustment
 }
 \usage{
-resolution(x, y)
+bl_resolution(x, y)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
