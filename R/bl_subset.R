@@ -19,7 +19,8 @@ bl_subset <- function(x,
   }
   
   # Return any errors
-  if (length(errors) > 0) return(errors)
+  if (length(errors) > 0) stop(paste(errors,
+                                     '\n  '))
   
   # Check the names are in x
   if(!(all(names %in% x@varnames))){
@@ -28,7 +29,8 @@ bl_subset <- function(x,
   }
   
   # Return any errors
-  if (length(errors) > 0) return(errors)
+  if (length(errors) > 0) stop(paste(errors,
+                                     '\n  '))
   
   # Pick out mean and covariance from x that corresponds 
   # with variables in names.

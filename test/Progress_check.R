@@ -86,3 +86,13 @@ bl_adjust(matrix(0,2,3),x)
 bl_subset(x,1)
 bl_subset(x,'a')
 bl_subset(matrix(0,2,3),x)
+
+z <- bl(name = 'Data',
+        varnames = c('V','K'),
+        expectation = c(5,0),
+        covariance = matrix(runif(4)/4,2,2))
+diag(z@covariance) <- rep(0.5,2)
+z@covariance <- z@covariance %*% t(z@covariance)
+z
+resolution(x,z)
+bl_adjust(x,z)
