@@ -37,7 +37,8 @@ bl_subset <- function(x,
   x_indices <- sapply(names,
                       function(x_names) which(x@varnames %in% x_names))
   y_expectation <- x@expectation[x_indices]
-  y_variance <- x@covariance[x_indices, x_indices]
+  y_variance <- x@covariance[x_indices, x_indices,
+                             drop = FALSE]
   
   # Set up new bl object with extracted mean and variance
   y <- bl(name = paste0(x@name,
