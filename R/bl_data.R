@@ -16,6 +16,12 @@ check_bl_data <- function(object) {
     errors <- c(errors, msg)
   }
   
+  # Check for uniqueness in variable names
+  if (length(object@varnames) != length(unique(object@varnames))){
+    msg <- paste0("All variables need to have unique names.")
+    errors <- c(errors, msg)
+  }
+  
   # Check correct number of expectations
   length_vars <- length(object@varnames)
   if (length_vars != length(object@values)) {

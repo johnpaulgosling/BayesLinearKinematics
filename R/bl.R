@@ -17,6 +17,12 @@ check_bl <- function(object) {
     errors <- c(errors, msg)
   }
   
+  # Check for uniqueness in variable names
+  if (length(object@varnames) != length(unique(object@varnames))){
+    msg <- paste0("All variables need to have unique names.")
+    errors <- c(errors, msg)
+  }
+  
   # Check correct number of expectations
   length_vars <- length(object@varnames)
   if (length_vars != length(object@expectation)) {
@@ -53,6 +59,13 @@ check_bl <- function(object) {
                   " by ",
                   col_length,
                   ".  It should be square.")
+    errors <- c(errors, msg)
+  }
+  
+  # Check validity of covariance matrix
+  variances <- diag(object@covariance)
+  if (any(variances < 0)){
+    msg <- paste0("The covariance matrix has negative entries on the diagonal.")
     errors <- c(errors, msg)
   }
   

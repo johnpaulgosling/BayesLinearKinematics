@@ -20,3 +20,14 @@ test_that("bl_subset operation extracting two", {
                                             4,1),
                                           byrow=TRUE,2,2))
 })
+
+data_obj <- bl_data(name = 'My_data',
+                    varnames = c('A','B','F'),
+                    values = c(1,2,6))
+
+sub_data_obj <- bl_subset(data_obj, c('B'))
+
+test_that("bl_subset operation extracting two", {
+  expect_equal(sub_data_obj@name, "My_data_extract")
+  expect_equal(sub_data_obj@values, 2)
+})

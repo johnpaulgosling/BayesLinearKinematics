@@ -94,5 +94,15 @@ z <- bl(name = 'Data',
 diag(z@covariance) <- rep(0.5,2)
 z@covariance <- z@covariance %*% t(z@covariance)
 z
-resolution(x,z)
+bl_resolution(x,z)
 bl_adjust(x,z)
+
+z <- bl(name = 'Data',
+        varnames = c('V','K'),
+        expectation = c(5,0),
+        covariance = diag(-1,2))
+
+z <- bl(name = 'Data',
+        varnames = c('V','V'),
+        expectation = c(5,0),
+        covariance = diag(1,2))
