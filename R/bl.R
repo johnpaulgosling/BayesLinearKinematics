@@ -64,7 +64,7 @@ check_bl <- function(object) {
   
   # Check validity of covariance matrix
   variances <- diag(object@covariance)
-  if (any(variances < 0)){
+  if (any(variances < -1e8)){
     msg <- paste0("The covariance matrix has negative entries on the diagonal.")
     errors <- c(errors, msg)
   }
