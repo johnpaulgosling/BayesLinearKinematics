@@ -5,7 +5,7 @@
 Resolution
 }
 \description{
-Resolution of variance achieved through Bayes linear (kinematics) adjustment
+Resolution of variance achieved through Bayes linear (kinematics) adjustment.
 }
 \usage{
 bl_resolution(x, y)

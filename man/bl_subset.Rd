@@ -5,7 +5,7 @@
 Bayes linear object subset
 }
 \description{
-Extract variables from a Bayes linear object
+Extract variables from a Bayes linear object.
 }
 \usage{
 bl_subset(x, names)

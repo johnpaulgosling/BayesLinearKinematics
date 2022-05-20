@@ -5,7 +5,7 @@
 Bayes linear kinematics adjustment
 }
 \description{
-Bayes linear kinematics adjustment
+Bayes linear kinematics adjustment.
 }
 \usage{
 bl_adjust(x, y)

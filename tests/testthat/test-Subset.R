@@ -41,11 +41,11 @@ sub_obj_2 <- bl_subset(obj_2,
                        obj@varnames)
 
 test_that("bl_subset inheriting order from other bl", {
-  expect_equal(sub_obj@name, "Second_extract")
-  expect_equal(sub_obj@varnames, obj@varnames)
-  expect_equal(sub_obj@expectation, c(1,6,0))
-  expect_equal(sub_obj@covariance, matrix(c(5,8,2,
-                                            6,9,3,
-                                            4,7,1),
-                                          byrow=TRUE,3,3))
+  expect_equal(sub_obj_2@name, "Second_extract")
+  expect_equal(sub_obj_2@varnames, obj@varnames)
+  expect_equal(sub_obj_2@expectation, c(1,6,0))
+  expect_equal(sub_obj_2@covariance, matrix(c(5,8,2,
+                                              6,9,3,
+                                              4,7,1),
+                                            byrow=TRUE,3,3))
 })
