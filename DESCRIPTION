@@ -1,6 +1,6 @@
 Package: BayesLinearKinematics
 Title: Bayes linear kinematics
-Version: 0.0.12
+Version: 0.0.13
 Authors@R: 
     person("John Paul", "Gosling", , "johnpaulgosling@gmail.com", role = c("aut", "cre"))
 Description: Implementation of Bayes linear (kinematic) adjustments.

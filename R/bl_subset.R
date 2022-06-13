@@ -1,12 +1,12 @@
 #' bl object subsetting
 #'
 #' @param x bl object to be subsetted.
-#' @param names variable names to be extracted.
+#' @param varnames variable names to be extracted.
 #'
 #' @return Extracted bl object.
 #' @export
 bl_subset <- function(x,
-                      names){
+                      varnames){
   # Somewhere to store error messages
   errors <- character()
   
@@ -23,7 +23,7 @@ bl_subset <- function(x,
                                      '\n  '))
   
   # Check the names are in x
-  if(!(all(names %in% x@varnames))){
+  if(!(all(varnames %in% x@varnames))){
     msg <- paste0("The variables to be extracted are not in x.")
     errors <- c(errors, msg)
   }
@@ -35,7 +35,7 @@ bl_subset <- function(x,
   if (class(x)[1] == 'bl'){
     # Pick out mean and covariance from x that corresponds 
     # with variables in names.
-    x_indices <- sapply(names,
+    x_indices <- sapply(varnames,
                         function(x_names) which(x@varnames %in% x_names))
     y_expectation <- x@expectation[x_indices]
     y_variance <- x@covariance[x_indices, x_indices,
@@ -44,20 +44,20 @@ bl_subset <- function(x,
     # Set up new bl object with extracted mean and variance
     y <- bl(name = paste0(x@name,
                           '_extract'),
-            varnames = names,
+            varnames = varnames,
             expectation = y_expectation,
             covariance = y_variance)
   } else {
     # Pick out values from x that corresponds 
     # with variables in names.
-    x_indices <- sapply(names,
+    x_indices <- sapply(varnames,
                         function(x_names) which(x@varnames %in% x_names))
     y_values <- x@values[x_indices]
     
     # Set up new bl object with extracted mean and variance
     y <- bl_data(name = paste0(x@name,
                                '_extract'),
-                 varnames = names,
+                 varnames = varnames,
                  values = y_values)
   }
   
