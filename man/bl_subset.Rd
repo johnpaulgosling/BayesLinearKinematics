@@ -8,14 +8,14 @@ Bayes linear object subset
 Extract variables from a Bayes linear object.
 }
 \usage{
-bl_subset(x, names)
+bl_subset(x, varnames)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
 bl object to be subsetted.
 }
-  \item{names}{
+  \item{varnames}{
 variable names to be extracted.
 }
 }
