@@ -49,3 +49,7 @@ test_that("bl_subset inheriting order from other bl", {
                                               4,7,1),
                                             byrow=TRUE,3,3))
 })
+
+# TODO Test needed to check permutation order.
+
+# TODO Additional tests that throw errors.

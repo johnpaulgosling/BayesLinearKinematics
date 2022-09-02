@@ -21,3 +21,6 @@ z <- bl(name = 'small',
         varnames = 'A',
         expectation = 0,
         covariance = matrix(1,1,1))
+# TODO Extend bl_adjust tests (with some worked out by hand).
+
+# TODO Additional tests that throw errors.

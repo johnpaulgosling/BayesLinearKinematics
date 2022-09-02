@@ -6,6 +6,7 @@
 #' @slot covariance A numeric matrix of covariances.
 # Validity check for class 'bl'
 check_bl <- function(object) {
+  # TODO Needs to be reformatted so that class is correctly added to documentation.
   # Somewhere to store error messages
   errors <- character()
   
@@ -68,6 +69,7 @@ check_bl <- function(object) {
     msg <- paste0("The covariance matrix has negative entries on the diagonal.")
     errors <- c(errors, msg)
   }
+  # TODO Extra validity checks regarding symmetry and positive definiteness.
   
   if (length(errors) == 0) TRUE else errors
 }

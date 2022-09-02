@@ -22,7 +22,7 @@ check_bl_data <- function(object) {
     errors <- c(errors, msg)
   }
   
-  # Check correct number of expectations
+  # Check correct number of values
   length_vars <- length(object@varnames)
   if (length_vars != length(object@values)) {
     msg <- paste0("Values is length ",

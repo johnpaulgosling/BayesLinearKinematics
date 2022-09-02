@@ -11,3 +11,5 @@ test_that("Check object class is S4", {
   expect_equal(isS4(obj), TRUE)
   expect_equal(isS4(odata), TRUE)
 })
+
+# TODO Additional tests that throw errors.

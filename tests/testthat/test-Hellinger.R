@@ -24,3 +24,5 @@ test_that("hellinger_squared for equal specifications", {
   expect_equal(h_dist_x, 0)
   expect_equal(h_dist_y, 0)
 })
+
+# TODO Additional tests that throw errors.
