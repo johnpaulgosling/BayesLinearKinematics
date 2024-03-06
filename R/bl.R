@@ -1,9 +1,9 @@
-#' An S4 class to represent a Bayes linear object.
-#'
+# An S4 class to represent a Bayes linear object.
+#' 
 #' @slot name A string for the name of the variable collection.
 #' @slot varnames A character vector of variable names.
 #' @slot expectation A numeric vector of expectations.
-#' @slot covariance A numeric matrix of covariances.
+#' @slot covariance A numeric matrix or a numeric scalar for covariances.
 # Validity check for class 'bl'
 check_bl <- function(object) {
   # TODO Needs to be reformatted so that class is correctly added to documentation.
@@ -35,41 +35,49 @@ check_bl <- function(object) {
     errors <- c(errors, msg)
   }
   
-  # Check dimensions of covariance
-  row_length <- length(object@covariance[1,])
-  col_length <- length(object@covariance[,1])
-  if (length_vars != row_length) {
-    msg <- paste0("The number of columns in covariance is ",
-                  row_length,
-                  ".  Should be ",
-                  length_vars,
-                  ".")
-    errors <- c(errors, msg)
-  }
-  if (length_vars != col_length) {
-    msg <- paste0("The number of rows in covariance is ",
-                  col_length,
-                  ".  Should be ",
-                  length_vars,
-                  ".")
-    errors <- c(errors, msg)
-  }
-  if (col_length != row_length) {
-    msg <- paste0("The covariance matrix is ",
-                  row_length,
-                  " by ",
-                  col_length,
-                  ".  It should be square.")
-    errors <- c(errors, msg)
-  }
+  # Check if covariance is a matrix or a scalar
+  # if (!is.numeric(object@covariance) || (is.matrix(object@covariance) && !is.null(dim(object@covariance)))) {
+  #   msg <- "Covariance should be either a numeric matrix or a numeric scalar."
+  #   errors <- c(errors, msg)
+  # }
   
-  # Check validity of covariance matrix
-  variances <- diag(object@covariance)
-  if (any(variances < -1e8)){
-    msg <- paste0("The covariance matrix has negative entries on the diagonal.")
-    errors <- c(errors, msg)
+  if (is.matrix(object@covariance)) {
+    # Check dimensions of covariance
+    row_length <- length(object@covariance[1,])
+    col_length <- length(object@covariance[,1])
+    if (length_vars != row_length) {
+      msg <- paste0("The number of columns in covariance is ",
+                    row_length,
+                    ".  Should be ",
+                    length_vars,
+                    ".")
+      errors <- c(errors, msg)
+    }
+    if (length_vars != col_length) {
+      msg <- paste0("The number of rows in covariance is ",
+                    col_length,
+                    ".  Should be ",
+                    length_vars,
+                    ".")
+      errors <- c(errors, msg)
+    }
+    if (col_length != row_length) {
+      msg <- paste0("The covariance matrix is ",
+                    row_length,
+                    " by ",
+                    col_length,
+                    ".  It should be square.")
+      errors <- c(errors, msg)
+    }
+    
+    # Check validity of covariance matrix
+    variances <- diag(object@covariance)
+    if (any(variances < -1e8)){
+      msg <- paste0("The covariance matrix has negative entries on the diagonal.")
+      errors <- c(errors, msg)
+    }
+    # TODO Extra validity checks regarding symmetry and positive definiteness.
   }
-  # TODO Extra validity checks regarding symmetry and positive definiteness.
   
   if (length(errors) == 0) TRUE else errors
 }
@@ -78,7 +86,7 @@ bl <- setClass('bl',
                slots = list(name = 'character',
                             varnames = 'character',
                             expectation = 'numeric',
-                            covariance = 'matrix'),
+                            covariance = 'ANY'),
                validity = check_bl)
 
 # Print method for class ('show')
@@ -92,9 +100,13 @@ setMethod('show',
                      rowlab = object@varnames,
                      collab = ' ')
             cat('\nCovariance:\n\n')
-            prmatrix(round(object@covariance, 2),
-                     rowlab = object@varnames,
-                     collab = object@varnames)
+            if (is.matrix(object@covariance)) {
+              prmatrix(round(object@covariance, 2),
+                       rowlab = object@varnames,
+                       collab = object@varnames)
+            } else {
+              cat(object@covariance, '\n')
+            }
           })
 
 # Plot method for class ('plot')
@@ -102,11 +114,15 @@ setMethod('plot',
           'bl',
           function(x) {
             par(mar=c(5.1, 4.1, 4.1, 4.1))
-            colnames(x@covariance) <- x@varnames
-            rownames(x@covariance) <- x@varnames
-            plot(x = x@covariance,
-                 main = paste0('Covariance stored in ',
-                               x@name),
-                 xlab = '',
-                 ylab = '')
+            if (is.matrix(x@covariance)) {
+              colnames(x@covariance) <- x@varnames
+              rownames(x@covariance) <- x@varnames
+              plot(x = x@covariance,
+                   main = paste0('Covariance stored in ',
+                                 x@name),
+                   xlab = '',
+                   ylab = '')
+            } else {
+              cat("Cannot plot a scalar covariance.\n")
+            }
           })

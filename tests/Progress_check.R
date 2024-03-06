@@ -100,9 +100,10 @@ bl_adjust(x,z)
 z <- bl(name = 'Data',
         varnames = c('V','K'),
         expectation = c(5,0),
-        covariance = diag(-1,2))
+        covariance = diag(-1,2)) # This needs to be caught...
 
 z <- bl(name = 'Data',
         varnames = c('V','V'),
         expectation = c(5,0),
         covariance = diag(1,2))
+
