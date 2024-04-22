@@ -100,14 +100,15 @@ setMethod('show',
                      rowlab = object@varnames,
                      collab = ' ')
             cat('\nCovariance:\n\n')
-            if (is.matrix(object@covariance)) {
+            if (length(object@varnames) > 1){
               prmatrix(round(object@covariance, 2),
                        rowlab = object@varnames,
-                       collab = object@varnames)
-            } else {
-              cat(object@covariance, '\n')
-            }
-          })
+                       collab = object@varnames)} else {
+                         cat(object@varnames, '  ',
+                             round(object@covariance, 2))
+                       }
+          }
+)
 
 # Plot method for class ('plot')
 setMethod('plot',
@@ -123,6 +124,6 @@ setMethod('plot',
                    xlab = '',
                    ylab = '')
             } else {
-              cat("Cannot plot a scalar covariance.\n")
+              cat("No point to plotting a scalar covariance.\n")
             }
           })
