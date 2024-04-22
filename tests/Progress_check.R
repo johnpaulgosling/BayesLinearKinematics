@@ -1,15 +1,15 @@
 library(BayesLinearKinematics)
 
 # Checking 'bl' object initialisation
+cov_help <-  matrix(runif(9),3,3)
+diag(cov_help) <- rep(1,3)
 obj <- bl(name = 'All',
           varnames = c('A','B','F'),
           expectation = c(0,1,6),
-          covariance = matrix(runif(9),3,3))
+          covariance = cov_help %*% t(cov_help))
 
-diag(obj@covariance) <- rep(1,3)
 
 isS4(obj)
-obj@covariance <- obj@covariance %*% t(obj@covariance)
 
 obj
 plot(obj)
@@ -26,11 +26,9 @@ plot(odata)
 
 # Checking simple BL adjustment adjustment
 x <- bl(name = 'All',
-        varnames = c('A','B','C'),
-        expectation = c(0,1,0),
-        covariance = matrix(runif(9),3,3))
-diag(x@covariance) <- rep(1,3)
-x@covariance <- x@covariance %*% t(x@covariance)
+       varnames = c('A','B','C'),
+       expectation = c(0,1,6),
+       covariance = cov_help %*% t(cov_help))
 x
 bl_subset(x, c('C','A'))
 

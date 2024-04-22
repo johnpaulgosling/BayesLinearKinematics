@@ -42,12 +42,6 @@ bl <- setClass('bl',
                    errors <- c(errors, msg)
                  }
                  
-                 # Check if covariance is a matrix or a scalar
-                 # if (!is.numeric(object@covariance) || (is.matrix(object@covariance) && !is.null(dim(object@covariance)))) {
-                 #   msg <- "Covariance should be either a numeric matrix or a numeric scalar."
-                 #   errors <- c(errors, msg)
-                 # }
-                 
                  if (is.matrix(object@covariance)) {
                    # Check dimensions of covariance
                    row_length <- length(object@covariance[1,])
@@ -83,7 +77,13 @@ bl <- setClass('bl',
                      msg <- paste0("The covariance matrix has negative entries on the diagonal.")
                      errors <- c(errors, msg)
                    }
-                   # TODO Extra validity checks regarding symmetry and positive definiteness.
+                   
+                   # Check symmetry of covariance matrix
+                   # if (any(object@covariance != t(object@covariance))){
+                   #   msg <- paste0("The covariance matrix is not symmetric.")
+                   #   errors <- c(errors, msg)
+                   # }
+                   
                  }
                  
                  if (length(errors) == 0) TRUE else errors

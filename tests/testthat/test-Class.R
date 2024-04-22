@@ -1,7 +1,9 @@
+cov_help <-  matrix(runif(9),3,3)
+diag(cov_help) <- rep(1,3)
 obj <- bl(name = 'All',
           varnames = c('A','B','F'),
           expectation = c(0,1,6),
-          covariance = matrix(runif(9),3,3))
+          covariance = cov_help %*% t(cov_help))
 
 odata <- bl_data(name = 'Data',
                  varnames = c('A','B','F'),
@@ -41,12 +43,14 @@ test_that("Validity checks for bl class", {
                   covariance = matrix(c(1,2,3,4,5,6), 2, 3)),
                "The covariance matrix is 3 by 2.  It should be square.")
   
+  # Test for covariance matrix symmetry
   # expect_error(bl(name = 'All',
   #                 varnames = c('A','B','F'),
   #                 expectation = c(0,1,6),
   #                 covariance = matrix(c(1,2,3,4,5,6,7,8,9), 3, 3)),
   #              "The covariance matrix is not symmetric.")
   
+  # Test for variance validity
   expect_error(bl(name = 'All',
                   varnames = c('A','B','F'),
                   expectation = c(0,1,6),
