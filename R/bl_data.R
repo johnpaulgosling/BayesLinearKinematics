@@ -8,48 +8,46 @@
 #' @slot values A numeric vector of observed values.
 #' 
 #' @export
-# Validity check for class 'bl_data'
-check_bl_data <- function(object) {
-  # TODO Needs to be reformatted so that class is correctly added to documentation.
-  # Somewhere to store error messages
-  errors <- character()
-  
-  # Check only one name has been passed
-  if (length(object@name) != 1){
-    msg <- paste0("Name is length ",
-                  length(object@varnames),
-                  ".  Should be 1.")
-    errors <- c(errors, msg)
-  }
-  
-  # Check for uniqueness in variable names
-  if (length(object@varnames) != length(unique(object@varnames))){
-    msg <- paste0("All variables need to have unique names.")
-    errors <- c(errors, msg)
-  }
-  
-  # Check correct number of values
-  length_vars <- length(object@varnames)
-  if (length_vars != length(object@values)) {
-    msg <- paste0("Values is length ",
-                  length(object@values),
-                  ".  Should be ",
-                  length_vars,
-                  ".")
-    errors <- c(errors, msg)
-  }
-  
-  return(errors)
-}
-
-# Set class for 'bl_data' 
 bl_data <- setClass('bl_data',
                     slots = list(name = 'character',
                                  varnames = 'character',
                                  values = 'numeric'),
-                    validity = check_bl_data)
+                    validity =  function(object) {
+                      # Somewhere to store error messages
+                      errors <- character()
+                      
+                      # Check only one name has been passed
+                      if (length(object@name) != 1){
+                        msg <- paste0("Name is length ",
+                                      length(object@name),
+                                      ". Should be 1.")
+                        errors <- c(errors, msg)
+                      }
+                      
+                      # Check for uniqueness in variable names
+                      if (length(object@varnames) != length(unique(object@varnames))){
+                        msg <- paste0("All variables need to have unique names.")
+                        errors <- c(errors, msg)
+                      }
+                      
+                      # Check correct number of values
+                      length_vars <- length(object@varnames)
+                      if (length_vars != length(object@values)) {
+                        msg <- paste0("Values is length ",
+                                      length(object@values),
+                                      ".  Should be ",
+                                      length_vars,
+                                      ".")
+                        errors <- c(errors, msg)
+                      }
+                      
+                      return(errors)
+                    }
+)
 
-# Print method for class ('show')
+#' Print method for bl_data class ('show')
+#'
+#' @export
 setMethod('show',
           'bl_data',
           function(object) {
@@ -61,7 +59,9 @@ setMethod('show',
                      collab = ' ')
           })
 
-# Plot method for class ('plot')
+#' Plot method for bl_data class ('plot')
+#'  
+#' @export
 setMethod('plot',
           'bl_data',
           function(x) {
