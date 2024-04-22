@@ -1,10 +1,16 @@
 #' An S4 class to represent data for a Bayes linear adjustment.
 #'
+#' @name bl_data
+#' @rdname bl_data
+#' 
 #' @slot name A string for the name of the variable collection.
 #' @slot varnames A character vector of variable names.
 #' @slot values A numeric vector of observed values.
+#' 
+#' @export
 # Validity check for class 'bl_data'
 check_bl_data <- function(object) {
+  # TODO Needs to be reformatted so that class is correctly added to documentation.
   # Somewhere to store error messages
   errors <- character()
   
@@ -33,9 +39,10 @@ check_bl_data <- function(object) {
     errors <- c(errors, msg)
   }
   
-  if (length(errors) == 0) TRUE else errors
+  return(errors)
 }
 
+# Set class for 'bl_data' 
 bl_data <- setClass('bl_data',
                     slots = list(name = 'character',
                                  varnames = 'character',

@@ -1,6 +1,6 @@
 Package: BayesLinearKinematics
 Title: Bayes linear kinematics
-Version: 0.0.15
+Version: 0.0.16
 Authors@R: 
     person("John Paul", "Gosling", , "johnpaulgosling@gmail.com", role = c("aut", "cre"))
 Description: Implementation of Bayes linear (kinematic) adjustments.
@@ -8,7 +8,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends: 
     plot.matrix,
     MASS

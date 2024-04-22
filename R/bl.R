@@ -1,9 +1,14 @@
-# An S4 class to represent a Bayes linear object.
+#' An S4 class to represent a Bayes linear object.
+#'
+#' @name bl
+#' @rdname bl
 #' 
 #' @slot name A string for the name of the variable collection.
 #' @slot varnames A character vector of variable names.
 #' @slot expectation A numeric vector of expectations.
 #' @slot covariance A numeric matrix or a numeric scalar for covariances.
+#' 
+#' @export
 # Validity check for class 'bl'
 check_bl <- function(object) {
   # TODO Needs to be reformatted so that class is correctly added to documentation.
@@ -82,6 +87,7 @@ check_bl <- function(object) {
   if (length(errors) == 0) TRUE else errors
 }
 
+# Set class for 'bl'
 bl <- setClass('bl',
                slots = list(name = 'character',
                             varnames = 'character',
