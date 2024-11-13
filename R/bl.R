@@ -125,12 +125,30 @@ setMethod('plot',
             if (is.matrix(x@covariance)) {
               colnames(x@covariance) <- x@varnames
               rownames(x@covariance) <- x@varnames
+              # Plot covariance matrix forcing 0 to be in the legend and
+              # making negative values shades of blue and positive values
+              # shades of red.
+              # Take the breaks out of the legend and reduce the number of
+              # values shown on the legend.
               plot(x = x@covariance,
                    main = paste0('Covariance stored in ',
                                  x@name),
                    xlab = '',
-                   ylab = '')
+                   ylab = '',
+                   col = colorRampPalette(c('blue', 'white', 'red'))(50),
+                   breaks = seq(-max(abs(x@covariance)),
+                                max(abs(x@covariance)),
+                                length.out = 50),
+                   border = NA,
+                   key=list(side=4,
+                            font=2,
+                            cex.axis=0.75),
+                   fmt.key="%.2f",
+                   polygon.key=NULL,
+                   axis.key=NULL,
+                   spacing.key=c(1,0.11,-0.5),
+                   cex = 0.5)
             } else {
-              cat("No point to plotting a scalar covariance.\n")
+              cat("No point in plotting a scalar covariance.\n")
             }
           })
