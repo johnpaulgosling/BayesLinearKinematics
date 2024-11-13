@@ -9,7 +9,7 @@ bl_adjust <- function(x,
                       y){
   # Somewhere to store error messages
   errors <- character()
-  
+
   # Check x and y are BL objects
   if (class(x)[1] != 'bl'){
     msg <- paste0("The class of x is ",
@@ -23,21 +23,21 @@ bl_adjust <- function(x,
                   ".  It should be bl or bl_data.")
     errors <- c(errors, msg)
   }
-  
+
   # Return any errors
   if (length(errors) > 0) stop(paste(errors,
                                      '\n  '))
-  
+
   # Check that all the y variables are in x
   if(!(all(y@varnames %in% x@varnames))){
     msg <- paste0("The variables to be adjusted are not in x.")
     errors <- c(errors, msg)
   }
-  
+
   # Return any errors
   if (length(errors) > 0) stop(paste(errors,
                                      '\n  '))
-  
+
   # Simple Bayes linear update if y is of class bl_data
   if (class(y)[1] == 'bl_data'){
     # Pick out mean and covariance from x that corresponds with y
@@ -46,27 +46,27 @@ bl_adjust <- function(x,
     y_expectation <- x@expectation[x_indices]
     y_variance <- x@covariance[x_indices, x_indices]
     xy_covariance <- x@covariance[, x_indices]
-    
+
     # Invert prior variance for y (using generalised inverse from MASS)
     inv_y_variance <- ginv(y_variance)
-    
+
     # Adjusted expectation
-    adj_expectation <- x@expectation + 
+    adj_expectation <- x@expectation +
       xy_covariance %*% inv_y_variance %*% (y@values - y_expectation)
-    
+
     # Adjusted variance
-    adj_variance <- x@covariance - 
+    adj_variance <- x@covariance -
       xy_covariance %*% inv_y_variance %*% t(xy_covariance)
-    
+
     # Set up new bl object with adjusted mean and variance
     x_adj_y <- bl(name = paste0(x@name,
                                 '_adj_',
                                 y@name),
                   varnames = x@varnames,
                   expectation = as.numeric(adj_expectation),
-                  covariance = adj_variance) 
+                  covariance = (t(adj_variance)+adj_variance)/2) # Forcing symmetry
   }
-  
+
   # Bayes linear kinematics update if y is of class bl
   if (class(y)[1] == 'bl'){
     # Pick out mean and covariance from x that corresponds with y
@@ -74,29 +74,29 @@ bl_adjust <- function(x,
     y_expectation <- x@expectation[x_indices]
     y_variance <- x@covariance[x_indices, x_indices]
     xy_covariance <- x@covariance[, x_indices]
-    
+
     # Invert prior variance for y (using generalised inverse from MASS)
     inv_y_variance <- ginv(y_variance)
-    
+
     # Create vector multiplier
     cov_var_mult <- xy_covariance %*% inv_y_variance
-    
+
     # Adjusted expectation
-    adj_expectation <- x@expectation + 
+    adj_expectation <- x@expectation +
       cov_var_mult %*% (y@expectation - y_expectation)
-    
+
     # Adjusted variance
     adj_variance <- x@covariance - cov_var_mult %*% t(xy_covariance) +
       cov_var_mult %*% y@covariance %*% t(cov_var_mult)
-    
+
     # Set up new bl object with adjusted mean and variance
     x_adj_y <- bl(name = paste0(x@name,
                                 '_adj_',
                                 y@name),
                   varnames = x@varnames,
                   expectation = as.numeric(adj_expectation),
-                  covariance = adj_variance) 
+                  covariance = (t(adj_variance)+adj_variance)/2) # Forcing symmetry
   }
-  
+
   return(x_adj_y)
 }

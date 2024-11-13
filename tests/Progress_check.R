@@ -52,7 +52,7 @@ x_adj_y
 plot(x_adj_y)
 bl_resolution(x,x_adj_y)
 
-# Checking BLK adjustment adjustment
+# Checking BLK adjustment
 x <- bl(name = 'All',
         varnames = c('A','B','C'),
         expectation = c(0,1,0),
