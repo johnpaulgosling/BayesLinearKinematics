@@ -2,7 +2,7 @@
 #'
 #' @name bl
 #' @rdname bl
-#' 
+#'
 #' @slot name A string for the name of the variable collection.
 #' @slot varnames A character vector of variable names.
 #' @slot expectation A numeric vector of expectations.
@@ -16,7 +16,7 @@ bl <- setClass('bl',
                             covariance = 'ANY'),
                validity = function(object) {
                  errors <- character()
-                 
+
                  # Check only one name has been passed
                  if (length(object@name) != 1){
                    msg <- paste0("Name is length ",
@@ -24,13 +24,13 @@ bl <- setClass('bl',
                                  ". Should be 1.")
                    errors <- c(errors, msg)
                  }
-                 
+
                  # Check for uniqueness in variable names
                  if (length(object@varnames) != length(unique(object@varnames))){
                    msg <- paste0("All variables need to have unique names.")
                    errors <- c(errors, msg)
                  }
-                 
+
                  # Check correct number of expectations
                  length_vars <- length(object@varnames)
                  if (length_vars != length(object@expectation)) {
@@ -41,7 +41,7 @@ bl <- setClass('bl',
                                  ".")
                    errors <- c(errors, msg)
                  }
-                 
+
                  if (is.matrix(object@covariance)) {
                    # Check dimensions of covariance
                    row_length <- length(object@covariance[1,])
@@ -70,22 +70,24 @@ bl <- setClass('bl',
                                    ".  It should be square.")
                      errors <- c(errors, msg)
                    }
-                   
+
                    # Check validity of covariance matrix
                    variances <- diag(object@covariance)
                    if (any(variances < -1e-8)){
                      msg <- paste0("The covariance matrix has negative entries on the diagonal.")
                      errors <- c(errors, msg)
                    }
-                   
+
                    # Check symmetry of covariance matrix
-                   # if (any(object@covariance != t(object@covariance))){
-                   #   msg <- paste0("The covariance matrix is not symmetric.")
-                   #   errors <- c(errors, msg)
-                   # }
-                   
+                   if (col_length == row_length){
+                     if (any(object@covariance != t(object@covariance))){
+                       msg <- paste0("The covariance matrix is not symmetric.")
+                       errors <- c(errors, msg)
+                     }
+                   }
+
                  }
-                 
+
                  if (length(errors) == 0) TRUE else errors
                }
 )
@@ -114,7 +116,7 @@ setMethod('show',
 )
 
 #' Plot method for bl class ('plot')
-#' 
+#'
 #' @export
 setMethod('plot',
           'bl',
