@@ -12,7 +12,7 @@ hellinger_squared(x, y)
 \item{y}{bl object.}
 }
 \value{
-Hellinger distance on the \link{0,1} scale.
+Hellinger distance on the 0,1 scale.
 }
 \description{
 Squared Hellinger distance between two bl objects

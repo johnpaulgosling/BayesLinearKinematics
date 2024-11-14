@@ -12,8 +12,25 @@ bl_resolution(x, y)
 \item{y}{bl object after adjustment.}
 }
 \value{
-Vector of resolutions on the \link{0,1} scale.
+Vector of resolutions on the 0,1 scale.
 }
 \description{
 Bayes linear kinematic adjustment
+}
+\examples{
+bl1 <- bl(name = 'Example 1',
+         varnames = c('x', 'y', 'z'),
+         expectation = c(1, 2, 3),
+         covariance = matrix(c(1, 0.5, 0.5,
+           0.5, 1, 0.5,
+           0.5, 0.5, 1), 3, 3))
+           
+bl2 <- bl(name = 'Example 2',
+        varnames = c('x', 'y', 'z'),
+        expectation = c(1.1, 2.1, 3.1),
+        covariance = matrix(c(1.1, 0.6, 0.6,
+        0.6, 1.1, 0.6,
+        0.6, 0.6, 1.1), 3, 3))
+        
+bl_resolution(bl2, bl1)         
 }

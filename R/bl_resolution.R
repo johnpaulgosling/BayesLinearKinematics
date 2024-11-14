@@ -3,8 +3,24 @@
 #' @param x bl object prior to adjustment.
 #' @param y bl object after adjustment.
 #'
-#' @return Vector of resolutions on the [0,1] scale.
+#' @return Vector of resolutions on the 0,1 scale.
 #' @export
+#' @examples
+#' bl1 <- bl(name = 'Example 1',
+#'          varnames = c('x', 'y', 'z'),
+#'          expectation = c(1, 2, 3),
+#'          covariance = matrix(c(1, 0.5, 0.5,
+#'            0.5, 1, 0.5,
+#'            0.5, 0.5, 1), 3, 3))
+#'            
+#' bl2 <- bl(name = 'Example 2',
+#'         varnames = c('x', 'y', 'z'),
+#'         expectation = c(1.1, 2.1, 3.1),
+#'         covariance = matrix(c(1.1, 0.6, 0.6,
+#'         0.6, 1.1, 0.6,
+#'         0.6, 0.6, 1.1), 3, 3))
+#'         
+#' bl_resolution(bl2, bl1)         
 bl_resolution <- function(x,
                        y){
   # Somewhere to store error messages

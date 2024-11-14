@@ -8,6 +8,10 @@
 #' @slot values A numeric vector of observed values.
 #' 
 #' @export
+#' @examples
+#' bl_data(name = 'Example 1',
+#'        varnames = c('x', 'y', 'z'),
+#'        values = c(1, 2, 3))
 bl_data <- setClass('bl_data',
                     slots = list(name = 'character',
                                  varnames = 'character',

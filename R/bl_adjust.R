@@ -5,6 +5,19 @@
 #'
 #' @return Adjusted bl object.
 #' @export
+#' @examples
+#' bl1 <- bl(name = 'Variables',
+#'         varnames = c('x', 'y', 'z'),
+#'         expectation = c(1, 2, 3),
+#'         covariance = matrix(c(1, 0.5, 0.5,
+#'         0.5, 1, 0.5,
+#'         0.5, 0.5, 1), 3, 3))
+#'         
+#' bl2 <- bl_data(name = 'Data',
+#'            varnames = c('x', 'y'),
+#'            values = c(1.1, 2.1))
+#'
+#' bl_adjust(bl1, bl2)
 bl_adjust <- function(x,
                       y){
   # Somewhere to store error messages

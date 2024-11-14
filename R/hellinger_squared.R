@@ -3,7 +3,7 @@
 #' @param x bl object.
 #' @param y bl object.
 #'
-#' @return Hellinger distance on the [0,1] scale.
+#' @return Hellinger distance on the 0,1 scale.
 #' @export
 hellinger_squared <- function(x,
                               y){

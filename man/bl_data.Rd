@@ -17,3 +17,8 @@ An S4 class to represent data for a Bayes linear adjustment.
 \item{\code{values}}{A numeric vector of observed values.}
 }}
 
+\examples{
+bl_data(name = 'Example 1',
+       varnames = c('x', 'y', 'z'),
+       values = c(1, 2, 3))
+}
