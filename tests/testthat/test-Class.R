@@ -34,14 +34,14 @@ test_that("Validity checks for bl class", {
                   varnames = c('A','B','F'),
                   expectation = c(0,1),
                   covariance = matrix(runif(9),3,3)),
-               "Expectations is length 2.  Should be 3.")
+               "Expectation is length 2. Should be 3.")
 
   # Test for covariance matrix validity
   expect_error(bl(name = 'All',
                   varnames = c('A','B','F'),
                   expectation = c(0,1,6),
                   covariance = matrix(c(1,2,3,4,5,6), 2, 3)),
-               "The covariance matrix is 3 by 2.  It should be square.")
+               "The number of rows in covariance is 2. Should be 3.")
 
   # Test for covariance matrix symmetry
   expect_error(bl(name = 'All',
