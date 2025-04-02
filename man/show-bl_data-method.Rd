@@ -2,10 +2,16 @@
 % Please edit documentation in R/bl_data.R
 \name{show,bl_data-method}
 \alias{show,bl_data-method}
-\title{Print method for bl_data class ('show')}
+\title{Basic show method for bl_data class}
 \usage{
 \S4method{show}{bl_data}(object)
 }
+\arguments{
+\item{object}{The object of class 'bl_data' to show.}
+}
+\value{
+Invisibly returns the original object \code{object}.
+}
 \description{
-Print method for bl_data class ('show')
+Displays the contents of a Bayes linear data ('bl_data') object.
 }

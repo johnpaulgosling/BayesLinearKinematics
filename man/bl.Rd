@@ -16,7 +16,7 @@ An S4 class to represent a Bayes linear object.
 
 \item{\code{expectation}}{A numeric vector of expectations.}
 
-\item{\code{covariance}}{A numeric matrix or a numeric scalar for covariances.}
+\item{\code{covariance}}{A numeric matrix (or a numeric scalar) for covariances.}
 }}
 
 \examples{
@@ -26,5 +26,5 @@ bl1 <- bl(name = 'Example 1',
           covariance = matrix(c(1, 0.5, 0.5,
                       0.5, 1, 0.5,
                       0.5, 0.5, 1), 3, 3))
-                      
+
 }

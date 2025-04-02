@@ -2,10 +2,17 @@
 % Please edit documentation in R/bl.R
 \name{show,bl-method}
 \alias{show,bl-method}
-\title{Print method for bl class ('show')}
+\title{Basic show method for bl class}
 \usage{
 \S4method{show}{bl}(object)
 }
+\arguments{
+\item{object}{The object of class 'bl' to show.}
+}
+\value{
+Invisibly returns the original object \code{object}.
+}
 \description{
-Print method for bl class ('show')
+Displays the contents of a Bayes linear ('bl') object. Called automatically
+when an object of class 'bl' is shown in the console.
 }
