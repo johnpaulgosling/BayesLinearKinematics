@@ -10,7 +10,7 @@ You can install the latest version of BayesLinearKinematics from GitHub with:
 
 ```R
 # install.packages("devtools")
-devtools::install_github("johnpaulgosling/BayesLinearKinematics")
+devtools::install_github("johnpaulgosling/BayesLinearKinematics", build_vignettes = TRUE)
 ```
 
 ## Cite us
