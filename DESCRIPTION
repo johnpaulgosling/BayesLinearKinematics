@@ -1,6 +1,6 @@
 Package: BayesLinearKinematics
 Title: Bayes linear kinematics
-Version: 0.2.5
+Version: 0.2.6
 Date: 2025-03-28
 Authors@R: 
     person("John Paul", "Gosling", , "johnpaulgosling@gmail.com", role = c("aut", "cre"))
@@ -11,7 +11,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Depends: 
-    plot.matrix,
+    plot.matrix (>= 1.6.0),
     MASS
 Suggests: 
     knitr,
