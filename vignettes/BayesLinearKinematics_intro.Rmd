@@ -21,13 +21,6 @@ knitr::opts_chunk$set(
 
 # Load the package itself. This makes its functions available within the vignette.
 library(BayesLinearKinematics)
-
-# Important Note on Dependencies:
-# Ensure that any packages your functions rely on (like MASS for ginv)
-# are listed in the 'Imports:' field of your package's DESCRIPTION file.
-# This ensures they are available when the vignette is built.
-# You generally shouldn't need to call library() for dependencies here
-# if they are correctly declared in DESCRIPTION.
 ```
 
 ## Introduction
@@ -38,7 +31,7 @@ The `BayesLinearKinematics` package provides tools for performing Bayes linear a
 
 The foundation of a Bayes linear analysis is specifying your prior beliefs about the variables of interest. This is done using the `bl` class, which stores expectations and covariances.
 
-Let's define prior beliefs for three variables, 'x', 'y' and 'z'. We expect them to be 1, 2 and 3 respectively. We also specify their covariance structure.
+Let's define prior beliefs for three variables, $x$, $y$ and $z$. We expect them to be 1, 2 and 3 respectively. We also specify their covariance structure.
 
 ```{r create_bl}
 # Define prior beliefs using the bl() constructor
@@ -56,6 +49,14 @@ bl_prior <- bl(name = 'Prior Beliefs',        # A descriptive name for this beli
 print(bl_prior, digits = 2)
 ```
 
+Essentially, here, we are encoding:
+$$
+\begin{align*}
+\text{E}\pmatrix{x\\y\\z} &= \pmatrix{1 \\ 2 \\ 3} \\
+\text{Cov}\pmatrix{x\\y\\z} &= \pmatrix{1.0 & 0.5 & 0.2 \\ 0.5 & 1.0 & 0.5 \\ 0.2 & 0.5 & 1.0}
+\end{align*}
+$$
+
 The `print` method gives a clean overview. We can also visualise the covariance matrix using the `plot` method defined for the `bl` class:
 
 ```{r plot_bl_prior, fig.show='hold', fig.cap="Plot of the prior covariance matrix."}
@@ -68,7 +69,7 @@ This plot shows the strength and sign of the prior covariances between variables
 
 ## 2. Representing Observed Data with `bl_data`
 
-Suppose we observe values for some of the variables. We represent this using the `bl_data` class. Let's say we observed 'x' to be 1.1 and 'y' to be 2.1.
+Suppose we observe values for some of the variables. We represent this using the `bl_data` class. Let's say we observed $x$ to be 1.1 and $y$ to be 2.1. For ease of exposition, we will denote these two observed variables as $D$ (for data).
 
 ```{r create_bl_data}
 # Define observed data using the bl_data() constructor
@@ -83,9 +84,12 @@ print(observed_data)
 ## 3. Adjusting Beliefs using Data (`bl_adjust`)
 
 The core operation is updating our prior beliefs (`bl_prior`) using the `observed_data`. The `bl_adjust` function performs this Bayes linear adjustment according to the standard formulae:
-* `E_adj[X] = E[X] + Cov(X, D) Var(D)^(-1) (d - E[D])`
-* `Var_adj[X] = Var[X] - Cov(X, D) Var(D)^(-1) Cov(D, X)`
-where X are the variables in `bl_prior`, D are the variables in `observed_data`, and d are the observed values.
+$$
+\begin{align*}
+\text{E}_D\pmatrix{x\\y\\z} &= \text{E}\pmatrix{x\\y\\z} + \text{Cov}\left[\pmatrix{x\\y\\z} ,\pmatrix{x\\y}\right]\cdot \text{Cov}\pmatrix{x\\y}^{-1} \cdot \left[D - \text{E}\pmatrix{x\\y}\right]\\
+\text{Cov}_D\pmatrix{x\\y\\z} &= \text{Cov}\pmatrix{x\\y\\z} - \text{Cov}\left[\pmatrix{x\\y\\z} ,\pmatrix{x\\y}\right]\cdot \text{Cov}\pmatrix{x\\y}^{-1} \cdot \text{Cov}\left[\pmatrix{x\\y\\z} ,\pmatrix{x\\y}\right]^T.
+\end{align*}
+$$
 
 ```{r adjust_beliefs_data}
 # Perform the adjustment using the prior beliefs and the observed data
@@ -98,7 +102,7 @@ bl_adjusted_data <- bl_adjust(x = bl_prior, y = observed_data)
 print(bl_adjusted_data, digits = 3)
 ```
 
-Notice how the expectations for 'x', 'y', and 'z' have changed from their prior values (1, 2, 3) based on the observations. The covariance matrix has also been updated, reflecting reduced uncertainty (variances on the diagonal are generally smaller). Let's plot the adjusted covariance:
+Notice how the expectations for $x$, $y$ and $z$ have changed from their prior values (1, 2, 3) based on the observations. The covariance matrix has also been updated, reflecting reduced uncertainty (variances on the diagonal are generally smaller). Let's plot the adjusted covariance:
 
 ```{r plot_bl_adjusted_data, fig.show='hold', fig.cap="Plot of the covariance matrix after adjustment with data."}
 # Plot the adjusted covariance matrix
@@ -110,7 +114,7 @@ Comparing this plot to the prior covariance plot, we can see changes, particular
 
 The `bl_adjust` function can also update one set of beliefs (`bl` object, `x`) based on another set of related beliefs (`bl` object, `y`). This is sometimes referred to as Bayes linear kinematics. It uses similar formulae but incorporates the uncertainty from the second belief object (`y`).
 
-Let's define a second belief structure, perhaps representing information about 'y' and 'z' from another source (e.g., a different sensor or expert opinion).
+Let's define a second belief structure, perhaps representing information about $y$ and $z$ from another source (e.g., a different sensor or expert opinion).
 
 ```{r create_bl_kinematics}
 # Define a second set of beliefs (e.g., from another expert or model)
@@ -156,7 +160,7 @@ resolution_values_data <- bl_resolution(x = bl_prior, y = bl_adjusted_data)
 print(round(resolution_values_data, 3))
 ```
 
-A resolution close to 1 means the variance for that variable was greatly reduced by the adjustment, while a value close to 0 means the adjustment had little impact on its variance. Here, 'x' and 'y' (the observed variables) have higher resolution, indicating their variance decreased significantly. 'z' also has some resolution, reflecting the information gained about it indirectly through its covariance with 'x' and 'y'.
+A resolution close to 1 means the variance for that variable was greatly reduced by the adjustment, while a value close to 0 means the adjustment had little impact on its variance. Here, $x$ and $y$ (the observed variables) have higher resolution, indicating their variance decreased significantly. $z$ also has some resolution, reflecting the information gained about it indirectly through its covariance with $x$ and $y$.
 
 We can also calculate the resolution resulting from the kinematic adjustment:
 ```{r calculate_resolution_kinematics}
