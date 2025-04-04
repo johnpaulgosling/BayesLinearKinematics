@@ -5,7 +5,7 @@
 #'
 #' @slot name A string for the name of the variable collection.
 #' @slot varnames A character vector of variable names.
-#' @slot values A numeric vector of observed values.
+#' @slot values A numeric vector of observed values (must be finite and not NA).
 #'
 #' @export
 #' @examples
@@ -31,6 +31,12 @@ bl_data <- setClass('bl_data',
                       # Check for uniqueness in variable names
                       if (length(object@varnames) != length(unique(object@varnames))){
                         msg <- paste0("All variables need to have unique names.")
+                        errors <- c(errors, msg)
+                      }
+
+                      # Check for finite values and absence of NA
+                      if (any(!is.finite(object@values))) {
+                        msg <- "All values must be finite (numeric, not NA, Inf, or -Inf)."
                         errors <- c(errors, msg)
                       }
 

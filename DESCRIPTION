@@ -1,6 +1,6 @@
 Package: BayesLinearKinematics
 Title: Bayes linear kinematics
-Version: 0.2.6
+Version: 0.2.7
 Date: 2025-03-28
 Authors@R: 
     person("John Paul", "Gosling", , "johnpaulgosling@gmail.com", role = c("aut", "cre"))

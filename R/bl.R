@@ -54,6 +54,18 @@ bl <- setClass('bl',
                    errors <- c(errors, msg)
                  }
 
+                 # Check for NAs in expectation ----> ADDED CHECK <----
+                 if (any(is.na(object@expectation))) {
+                   msg <- "The expectation vector must not contain NA values."
+                   errors <- c(errors, msg)
+                 }
+
+                 # Check for NAs in covariance ----> ADDED CHECK <----
+                 if (any(is.na(object@covariance))) {
+                   msg <- "The covariance matrix/value must not contain NA values."
+                   errors <- c(errors, msg)
+                 }
+
                  if (is.matrix(object@covariance)) {
                    # Check dimensions of covariance
                    row_length <- nrow(object@covariance)
@@ -75,21 +87,32 @@ bl <- setClass('bl',
                      errors <- c(errors, msg)
                    }
 
-                   # Check validity of covariance matrix
-                   variances <- diag(object@covariance)
-                   if (any(variances < -1e-8)){
-                     msg <- paste0("The covariance matrix has negative entries on the diagonal.")
-                     errors <- c(errors, msg)
-                   }
+                   # Check validity of covariance matrix (only if no NAs present)
+                   if (!any(is.na(object@covariance))) { # Avoid errors in checks below if NAs exist
+                     variances <- diag(object@covariance)
+                     # Check for negative variances (allowing for small numerical errors)
+                     if (any(variances < -1e-8)){
+                       msg <- paste0("The covariance matrix has negative entries on the diagonal.")
+                       errors <- c(errors, msg)
+                     }
 
-                   # Check symmetry of covariance matrix
-                   if (col_length == row_length){
-                     if (any(object@covariance != t(object@covariance))){
-                       msg <- paste0("The covariance matrix is not symmetric.")
+                     # Check symmetry of covariance matrix (only if dimensions match)
+                     if (col_length == row_length){
+                       if (any(object@covariance != t(object@covariance))){
+                         msg <- paste0("The covariance matrix is not symmetric.")
+                         errors <- c(errors, msg)
+                       }
+                     }
+                   } # End of NA check block for matrix properties
+
+                 } else if (is.numeric(object@covariance)) {
+                   # Check validity for scalar covariance (non-negative variance)
+                   if (!any(is.na(object@covariance))) { # Avoid error if NA
+                     if (object@covariance < -1e-8) {
+                       msg <- "The scalar covariance (variance) must be non-negative."
                        errors <- c(errors, msg)
                      }
                    }
-
                  }
 
                  if (length(errors) == 0) TRUE else errors
