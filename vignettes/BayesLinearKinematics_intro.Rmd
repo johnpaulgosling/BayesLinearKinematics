@@ -16,16 +16,27 @@ vignette: >
 # comment = "#>":  Standard prefix for R output lines. Makes output look like comments.
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
-)
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 6.5)
 
-# Load the package itself. This makes its functions available within the vignette.
+# Load the package
 library(BayesLinearKinematics)
+
+# Store package version
+pkg_version <- packageVersion("BayesLinearKinematics")
+
+# Store the R version
+r_version <- R.version.string
 ```
+
+This vignette assumes a basic understanding of statistical concepts like expectation, variance, and covariance.
 
 ## Introduction
 
 The `BayesLinearKinematics` package provides tools for performing Bayes linear analysis. This involves representing uncertain beliefs about quantities using expectation and covariance, and updating these beliefs based on observed data or other uncertain information (kinematics). This vignette demonstrates the core workflow: defining prior beliefs, structuring observed data, performing adjustments, and evaluating the result.
+
+Note that this vignette was created using R version `r r_version` and the `BayesLinearKinematics` package version `r pkg_version`.
 
 ## 1. Defining Prior Beliefs with `bl`
 
