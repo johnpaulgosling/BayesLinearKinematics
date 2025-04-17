@@ -1,0 +1,194 @@
+---
+title: "Hellinger Distances Between Belief Specifications"
+output: rmarkdown::html_vignette
+vignette: >
+ %\VignetteIndexEntry{Hellinger Distances Between Belief Specifications}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+# Chunk Options:
+knitr::opts_chunk$set(
+ collapse = TRUE,
+ comment = "#>",
+ fig.width = 7,
+ fig.height = 6.5)
+
+# Load the package
+library(BayesLinearKinematics)
+
+# Load MASS for ginv used in hellinger_squared for multivariate case
+# Ensure MASS is listed as a dependency if you haven't already
+library(MASS) 
+
+# Store package version
+pkg_version <- packageVersion("BayesLinearKinematics")
+
+# Store the R version
+r_version <- R.version.string
+```
+
+This vignette assumes familiarity with the `bl` object class introduced in the "Introduction to the `BayesLinearKinematics` package" vignette.
+
+
+Note that this vignette was created using R version `r r_version` and the `BayesLinearKinematics` package version `r pkg_version`.
+
+## Introduction
+
+In Bayes linear analysis, we represent beliefs using expectations and covariances. Sometimes, we want to quantify how "different" two belief specifications are. The Hellinger distance is a metric used to measure the similarity between two probability distributions. While a `bl` object only stores the first two moments (expectation and covariance), we can calculate the Hellinger distance between the multivariate normal distributions that share these moments. This provides a useful measure of discrepancy between two belief specifications encapsulated in `bl` objects.
+
+The squared Hellinger distance $H^2(P, Q)$ ranges between 0 and 1 where 0 indicates the distributions (and thus the expectations and covariances) are identical and 1 indicates maximal difference.
+
+This vignette demonstrates how to use the `hellinger_squared()` function in the `BayesLinearKinematics` package to calculate this distance.
+
+## Defining the Squared Hellinger Distance (Normal Case)
+
+The `hellinger_squared()` function calculates the distance between two `bl` objects `x` and `y` by assuming they represent multivariate normal distributions $P$ and $Q$ respectively with means $\mu_1, \mu_2$ (from `x@expectation`, `y@expectation`) and covariance matrices $\Sigma_1, \Sigma_2$ (from `x@covariance`, `y@covariance`).
+
+Univariate Case: If the `bl` objects represent beliefs about a single variable ($P = N(\mu_1, \sigma_1^2)$, $Q = N(\mu_2, \sigma_2^2)$), the squared Hellinger distance is:
+$$H^2(P, Q) = 1 - \sqrt{\frac{2 \sigma_1 \sigma_2}{\sigma_1^2 + \sigma_2^2}} \exp\left(-\frac{1}{4} \frac{(\mu_1 - \mu_2)^2}{\sigma_1^2 + \sigma_2^2}\right)$$
+
+Multivariate Case: If the `bl` objects represent beliefs about multiple variables ($P = N(\mu_1, \Sigma_1)$, $Q = N(\mu_2, \Sigma_2)$), the squared Hellinger distance is:
+$$H^2(P, Q) = 1 - \frac{\det(\Sigma_1)^{1/4} \det(\Sigma_2)^{1/4}}{\det\left(\frac{\Sigma_1 + \Sigma_2}{2}\right)^{1/2}} \exp\left(-\frac{1}{8} (\mu_1 - \mu_2)^T \left(\frac{\Sigma_1 + \Sigma_2}{2}\right)^{-1} (\mu_1 - \mu_2)\right)$$
+where $\det(\cdot)$ denotes the determinant of a matrix and $(\cdot)^{-1}$ denotes the matrix inverse (or generalised inverse ginv as used in the function for numerical stability).  
+
+## Calculating Distance Between Two Belief Specifications
+
+Let's define two different belief specifications for the same set of variables $x$, $y$ and $z$. We can then use hellinger_squared() to quantify how much these beliefs differ.
+
+First, we define belief_A perhaps representing an initial assessment.
+
+```{r}
+# Define first belief specification
+belief_A <- bl(name = 'Belief A',
+              varnames = c('x', 'y', 'z'),
+              expectation = c(1, 2, 3),
+              covariance = matrix(c(1.0, 0.5, 0.2,
+                                    0.5, 1.0, 0.5,
+                                    0.2, 0.5, 1.0),
+                                  nrow = 3, ncol = 3))
+
+belief_A
+plot(belief_A)
+```
+
+Now, we define `belief_B` representing an alternative assessment perhaps from a different expert or model.
+
+```{r}
+# Define second belief specification (different expectation and covariance)
+belief_B <- bl(name = 'Belief B',
+              varnames = c('x', 'y', 'z'),
+              expectation = c(1.2, 2.1, 2.9), # Slightly different means
+              covariance = matrix(c(1.1, 0.4, 0.3, # Slightly different covariance
+                                    0.4, 0.9, 0.6,
+                                    0.3, 0.6, 1.2),
+                                  nrow = 3, ncol = 3))
+
+belief_B
+plot(belief_B)
+```
+
+Now, we calculate the squared Hellinger distance between `belief_A` and `belief_B`.
+
+```{r}
+# Calculate the squared Hellinger distance
+# x: The first 'bl' object.
+# y: The second 'bl' object.
+dist_A_B <- hellinger_squared(x = belief_A, y = belief_B)
+
+# Print the result
+cat(paste("Squared Hellinger distance between Belief A and Belief B:",
+          round(dist_A_B, 4)))
+```
+
+The resulting value (likely small but non-zero) quantifies the difference between these two belief specifications under the normality assumption. A value closer to 0 indicates higher similarity.
+
+Let's also quickly check the univariate case.
+
+```{r}
+# Univariate beliefs
+belief_X1 <- bl(name="X1", varnames="x", expectation=1, covariance=matrix(1))
+belief_X2 <- bl(name="X2", varnames="x", expectation=1.5, covariance=matrix(1.2))
+
+dist_X1_X2 <- hellinger_squared(belief_X1, belief_X2)
+
+cat(paste("Squared Hellinger distance between Belief X1 and Belief X2:",
+          round(dist_X1_X2, 4)))
+
+# Check distance to self (should be 0)
+dist_X1_X1 <- hellinger_squared(belief_X1, belief_X1)
+cat(paste("\nSquared Hellinger distance between Belief X1 and itself:",
+          round(dist_X1_X1, 4)))
+```
+
+## Measuring the Impact of Kinematic Adjustment
+
+The Hellinger distance can also be used to measure how much a belief specification changes after undergoing a Bayes linear adjustment (kinematics). We can calculate the distance between the prior beliefs and the adjusted beliefs.
+
+Let's reuse the prior beliefs (`bl_prior`) and the kinematic information (`bl_info`) from the introductory vignette examples.
+
+```{r}
+# Define prior beliefs (same as intro vignette)
+bl_prior <- bl(name = 'Prior Beliefs',
+               varnames = c('x', 'y', 'z'),
+               expectation = c(1, 2, 3),
+               covariance = matrix(c(1.0, 0.5, 0.2,
+                                     0.5, 1.0, 0.5,
+                                     0.2, 0.5, 1.0),
+                                   nrow = 3, ncol = 3))
+
+# Define kinematic information (same as intro vignette)
+bl_info <- bl(name = "Info",
+              varnames = c('y', 'z'),
+              expectation = c(2.2, 2.8),
+              covariance = matrix(c(0.5, 0.1,
+                                    0.1, 0.6), nrow=2, ncol=2))
+
+# Perform the kinematic adjustment
+bl_adjusted_kinematics <- bl_adjust(x = bl_prior, y = bl_info)
+
+# Quick look at the prior and adjusted beliefs
+bl_prior
+bl_adjusted_kinematics
+```
+
+Now, we calculate the squared Hellinger distance between the prior belief (`bl_prior`) and the belief state after adjustment (`bl_adjusted_kinematics`). Note that `bl_adjust` might only adjust a subset of variables if `bl_info` covers fewer variables than `bl_prior`. `hellinger_squared` requires both inputs to cover the same set of variables. We should calculate the distance over the variables common to both stages after adjustment i.e. the variables present in `bl_adjusted_kinematics`. In this specific case, `bl_adjust` preserves all variables from `bl_prior` so we can compare them directly.
+
+```{r}
+# Plot prior covariance
+plot(bl_prior)
+
+# Plot adjusted covariance
+plot(bl_adjusted_kinematics)
+
+# Calculate squared Hellinger distance between prior and adjusted beliefs
+dist_kinematic <- hellinger_squared(x = bl_prior, y = bl_adjusted_kinematics)
+
+# Print the result
+cat(paste("\nSquared Hellinger distance between Prior and Adjusted (Kinematic):",
+          round(dist_kinematic, 4)))
+```
+
+This distance quantifies the magnitude of the belief change induced by the kinematic update from `bl_info`. A larger value implies the kinematic information caused a greater shift in the belief state (mean and/or covariance structure) under the normality assumption.
+
+## Function Notes
+
+The `hellinger_squared` function includes several checks:
+
+*    It ensures both inputs (x and y) are `bl` objects.
+*    It verifies that both `bl` objects contain the exact same set of variable names (`varnames`).
+*    It internally reorders the second object (y) to match the variable order of the first object (`x`) using `bl_subset` before performing calculations ensuring alignment.
+
+If these conditions are not met, the function will stop and return an informative error message.
+
+## Summary
+
+This vignette demonstrated the use of the hellinger_squared() function to compute a measure of distance between two belief specifications (bl objects) based on their corresponding multivariate normal distributions.
+
+*    We reviewed the formulae used for univariate and multivariate cases.
+*    We calculated the distance between two distinct `bl` objects (`belief_A` and `belief_B`).
+*    We calculated the distance between a prior belief (`bl_prior`) and its state after a kinematic update (`bl_adjusted_kinematics`) to quantify the impact of the adjustment.
+
+The squared Hellinger distance provides a value between 0 and 1 offering a standardised way to compare belief structures or measure the effect of belief updates within the `BayesLinearKinematics` framework assuming normality based on the first two moments.
+
