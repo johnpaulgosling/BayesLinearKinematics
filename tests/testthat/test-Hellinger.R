@@ -62,7 +62,6 @@ test_that("Input validation works correctly", {
                regexp = "Some of the variables in y are not in x.")
   expect_error(hellinger_squared(x = bl_overlap_vars, y = bl1),
                regexp = "Some of the variables in y are not in x.")
-
 })
 
 test_that("Calculation is correct for identical distributions", {
@@ -73,15 +72,15 @@ test_that("Calculation is correct for identical distributions", {
 
 test_that("Calculation handles variable reordering", {
   # Distance between bl1 and its reordered version should be 0
-  # This relies on bl_subset working correctly inside hellinger_squared
-  expect_equal(hellinger_squared(bl1, bl1_reordered), 0.39, tolerance = 0.01)
-  expect_equal(hellinger_squared(bl1_reordered, bl1), 0.39, tolerance = 0.01)
+  # This relies on bl_subset working correctly inside Hellinger_squared
+  expect_equal(hellinger_squared(bl1, bl1_reordered), 0, tolerance = 0.01)
+  expect_equal(hellinger_squared(bl1_reordered, bl1), 0, tolerance = 0.01)
 
   # Calculate between bl1 and bl2, and bl1_reordered and bl2
   # The results should be the same (testing interaction with bl_subset)
   res12 <- hellinger_squared(bl1, bl2)
   res_reordered_12 <- hellinger_squared(bl1_reordered, bl2)
-  expect_equal(res12-res_reordered_12, -0.303, tolerance = 0.01)
+  expect_equal(res12-res_reordered_12, 0, tolerance = 0.01)
 })
 
 test_that("Calculation gives plausible result for different distributions", {

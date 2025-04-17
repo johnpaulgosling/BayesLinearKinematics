@@ -48,13 +48,28 @@ hellinger_squared <- function(x,
   # We will inherit the order from x.
   ordered_y <- bl_subset(y,x@varnames)
   
-  # Calculate the squared Hellinger distance
-  det_part <- (det(x@covariance)^0.25)*(det(y@covariance)^0.25)/
-    (det((x@covariance+y@covariance)/2)^0.5)
-  exp_part <- -0.125 * t(x@expectation-y@expectation) %*% 
-    ginv((x@covariance+y@covariance)/2) %*% 
-    (x@expectation-y@expectation)
-  squared_H <- as.numeric(1 - det_part * exp(exp_part))
+  # We have different formulae for univariate and multivariate cases
+  if (length(x@varnames) == 1){
+    x_v <- as.numeric(x@covariance)
+    y_v <- as.numeric(ordered_y@covariance)
+    x_sd <- sqrt(x_v)
+    y_sd <- sqrt(y_v)
+    
+    
+    # Calculate the squared Hellinger distance
+    sigma_part <- sqrt(2 * x_sd * y_sd) / sqrt((x_v + y_v))
+    exp_part <- -0.25 * (x@expectation - ordered_y@expectation)^2 / 
+      (x_v + y_v)
+    squared_H <- as.numeric(1 - sigma_part * exp(exp_part))
+  } else {
+    # Calculate the squared Hellinger distance
+    det_part <- (det(x@covariance)^0.25)*(det(ordered_y@covariance)^0.25)/
+      (det((x@covariance+ordered_y@covariance)/2)^0.5)
+    exp_part <- -0.125 * t(x@expectation-ordered_y@expectation) %*% 
+      ginv((x@covariance+ordered_y@covariance)/2) %*% 
+      (x@expectation-ordered_y@expectation)
+    squared_H <- as.numeric(1 - det_part * exp(exp_part))
+  }
   
   return(squared_H)
 }
