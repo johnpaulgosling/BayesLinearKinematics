@@ -10,10 +10,10 @@
 #' @param x A 'bl' object representing the **prior** beliefs (before adjustment).
 #' @param y A 'bl' object representing the **adjusted** beliefs (after adjustment).
 #'
-#' @return A named numeric vector of resolutions, ideally on the [0, 1] scale.
+#' @return A named numeric vector of resolutions, ideally on the 0-1 scale.
 #'   Names correspond to the variable names in the input objects. Issues a
 #'   warning if any prior variances are non-positive or if calculated
-#'   resolutions fall outside [0, 1].
+#'   resolutions fall outside 0-1.
 #' @export
 #' @importFrom methods is # For class checking
 #' @examples

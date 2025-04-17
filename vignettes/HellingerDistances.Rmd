@@ -1,5 +1,5 @@
 ---
-title: "Hellinger Distances Between Belief Specifications"
+title: "Hellinger distances between belief specifications"
 output: rmarkdown::html_vignette
 vignette: >
  %\VignetteIndexEntry{Hellinger Distances Between Belief Specifications}
