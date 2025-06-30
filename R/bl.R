@@ -21,94 +21,92 @@ setClassUnion("MatrixOrNumeric", c("matrix", "numeric"))
 #'                       0.5, 1, 0.5,
 #'                       0.5, 0.5, 1), 3, 3))
 #'
+# It's good practice to define the class union if it doesn't exist yet
+# setClassUnion("MatrixOrNumeric", c("Matrix", "numeric"))
+
 bl <- setClass('bl',
-               slots = list(name = 'character',
-                            varnames = 'character',
-                            expectation = 'numeric',
-                            covariance = 'MatrixOrNumeric'),
+               slots = list(
+                 name = 'character',
+                 varnames = 'character',
+                 expectation = 'numeric',
+                 covariance = 'MatrixOrNumeric'
+               ),
                validity = function(object) {
                  errors <- character()
-
-                 # Check only one name has been passed
-                 if (length(object@name) != 1){
-                   msg <- paste0("Name is length ",
-                                 length(object@name),
-                                 ". Should be 1.")
-                   errors <- c(errors, msg)
-                 }
-
-                 # Check for uniqueness in variable names
-                 if (length(object@varnames) != length(unique(object@varnames))){
-                   msg <- paste0("All variables need to have unique names.")
-                   errors <- c(errors, msg)
-                 }
-
-                 # Check correct number of expectations
                  length_vars <- length(object@varnames)
+
+                 # 1. Check only one name has been passed
+                 if (length(object@name) != 1) {
+                   msg <- paste0("Slot 'name' must have length 1, not ", length(object@name), ".")
+                   errors <- c(errors, msg)
+                 }
+
+                 # 2. Check for uniqueness in variable names
+                 if (length_vars != length(unique(object@varnames))) {
+                   msg <- "All variable names in 'varnames' must be unique."
+                   errors <- c(errors, msg)
+                 }
+
+                 # 3. Check correct number of expectations
                  if (length_vars != length(object@expectation)) {
-                   msg <- paste0("Expectation is length ",
-                                 length(object@expectation),
-                                 ". Should be ",
-                                 length_vars,
-                                 ".")
+                   msg <- paste0("Slot 'expectation' has length ", length(object@expectation),
+                                 ". It should match the number of variables: ", length_vars, ".")
                    errors <- c(errors, msg)
                  }
 
-                 # Check for NAs in expectation ----> ADDED CHECK <----
+                 # 4. Check for NAs in expectation
                  if (any(is.na(object@expectation))) {
-                   msg <- "The expectation vector must not contain NA values."
+                   msg <- "The 'expectation' vector must not contain NA values."
                    errors <- c(errors, msg)
                  }
 
-                 # Check for NAs in covariance ----> ADDED CHECK <----
+                 # --- Improved Covariance Validity Checks ---
+
+                 # 5. Check for NAs in covariance first
                  if (any(is.na(object@covariance))) {
-                   msg <- "The covariance matrix/value must not contain NA values."
+                   msg <- "The 'covariance' matrix or value must not contain NA values."
                    errors <- c(errors, msg)
-                 }
+                 } else {
+                   # Proceed with checks only if no NAs are present
 
-                 if (is.matrix(object@covariance)) {
-                   # Check dimensions of covariance
-                   row_length <- nrow(object@covariance)
-                   col_length <- ncol(object@covariance)
-                   if (length_vars != col_length) {
-                     msg <- paste0("The number of columns in covariance is ",
-                                   col_length,
-                                   ". Should be ",
-                                   length_vars,
-                                   ".")
-                     errors <- c(errors, msg)
-                   }
-                   if (length_vars != row_length) {
-                     msg <- paste0("The number of rows in covariance is ",
-                                   row_length,
-                                   ". Should be ",
-                                   length_vars,
-                                   ".")
-                     errors <- c(errors, msg)
-                   }
-
-                   # Check validity of covariance matrix (only if no NAs present)
-                   if (!any(is.na(object@covariance))) { # Avoid errors in checks below if NAs exist
-                     variances <- diag(object@covariance)
-                     # Check for negative variances (allowing for small numerical errors)
-                     if (any(variances < -1e-8)){
-                       msg <- paste0("The covariance matrix has negative entries on the diagonal.")
+                   if (is.matrix(object@covariance)) {
+                     # 6. Check dimensions of covariance matrix
+                     if (!all(dim(object@covariance) == c(length_vars, length_vars))) {
+                       msg <- paste0("The covariance matrix has dimensions (",
+                                     nrow(object@covariance), ", ", ncol(object@covariance),
+                                     "). It must be a square matrix with dimensions (",
+                                     length_vars, ", ", length_vars, ").")
                        errors <- c(errors, msg)
-                     }
+                     } else {
+                       # These checks only make sense for a correctly dimensioned matrix
 
-                     # Check symmetry of covariance matrix (only if dimensions match)
-                     if (col_length == row_length){
-                       if (any(object@covariance != t(object@covariance))){
-                         msg <- paste0("The covariance matrix is not symmetric.")
+                       # 7. Robust check for symmetry
+                       if (!isSymmetric(object@covariance, tol = 100 * .Machine$double.eps)) {
+                         msg <- "The covariance matrix is not symmetric."
+                         errors <- c(errors, msg)
+                       }
+
+                       # 8. Check for positive semi-definiteness via eigenvalues
+                       # This is the definitive test for a valid covariance matrix.
+                       eigenvalues <- eigen(object@covariance, symmetric = TRUE, only.values = TRUE)$values
+                       if (any(eigenvalues < -1e-8)) {
+                         msg <- paste0("The covariance matrix is not positive semi-definite. ",
+                                       "It has at least one negative eigenvalue.")
                          errors <- c(errors, msg)
                        }
                      }
-                   } # End of NA check block for matrix properties
+                   } else if (is.numeric(object@covariance)) {
+                     # This handles the case of a single variable (scalar variance)
 
-                 } else if (is.numeric(object@covariance)) {
-                   # Check validity for scalar covariance (non-negative variance)
-                   if (!any(is.na(object@covariance))) { # Avoid error if NA
-                     if (object@covariance < -1e-8) {
+                     # 9. Check for a single value when there is one variable
+                     if (length_vars == 1 && length(object@covariance) != 1) {
+                       msg <- paste0("For a single variable, covariance should be a single numeric value, ",
+                                     "not a vector of length ", length(object@covariance), ".")
+                       errors <- c(errors, msg)
+                     }
+
+                     # 10. Check that scalar variance is non-negative
+                     if (any(object@covariance < -1e-8)) {
                        msg <- "The scalar covariance (variance) must be non-negative."
                        errors <- c(errors, msg)
                      }

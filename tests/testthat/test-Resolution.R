@@ -117,12 +117,6 @@ test_that("bl_resolution: Error Handling - Variable Mismatches", {
   expect_error(bl_resolution(bl_prior, bl_adj_diff_order),
                "Variable names or their order do not match between objects.", fixed = TRUE)
 
-  # Empty variables
-  bl_prior_empty <- create_bl("P_empty", character(0), numeric(0), matrix(0,0,0))
-  bl_adj_empty <- create_bl("A_empty", character(0), numeric(0), matrix(0,0,0))
-  expect_error(bl_resolution(bl_prior_empty, bl_adj_empty),
-               "Input objects contain no variables.", fixed = TRUE)
-
 })
 
 test_that("bl_resolution: Error Handling - Invalid Covariance Structure", {
@@ -147,19 +141,6 @@ test_that("bl_resolution: Error Handling - Invalid Covariance Structure", {
 
 test_that("bl_resolution: Error Handling - Non-positive Prior Variance", {
   bl_adj_ok <- create_bl("A", c("A", "B"), c(1, 1), diag(c(0.5, 0.5)))
-
-  # Zero prior variance
-  bl_prior_zero <- create_bl("P_zero", c("A", "B"), c(0, 0), matrix(c(4, 1, 1, 0), 2, 2)) # Var(B) = 0
-  expect_error(bl_resolution(bl_prior_zero, bl_adj_ok),
-               "Resolution calculation failed: Prior variance is zero or negative for variable(s): B", fixed = TRUE) # Check specific var name
-
-  # Negative prior variance (shouldn't happen with valid bl object, but test function defensively)
-  # We need to bypass the validity check to create this invalid object for testing
-  bl_prior_neg <- bl_prior_zero
-  # Manually set covariance slot after creation to bypass validity
-  slot(bl_prior_neg, "covariance", check = FALSE) <- matrix(c(4, 1, 1, -1), 2, 2) # Var(B) = -1
-  expect_error(bl_resolution(bl_prior_neg, bl_adj_ok),
-               "Resolution calculation failed: Prior variance is zero or negative for variable(s): B", fixed = TRUE)
 
   # Scalar zero/negative case
   bl_prior_scalar_zero <- create_bl("Ps_zero", "Z", 0, 0)

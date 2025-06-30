@@ -13,53 +13,45 @@
 #'        varnames = c('x', 'y', 'z'),
 #'        values = c(1, 2, 3))
 bl_data <- setClass('bl_data',
-                    slots = list(name = 'character',
-                                 varnames = 'character',
-                                 values = 'numeric'),
-                    validity =  function(object) {
+                    slots = list(
+                      name = 'character',
+                      varnames = 'character',
+                      values = 'numeric'
+                    ),
+                    validity = function(object) {
                       # Somewhere to store error messages
                       errors <- character()
-
-                      # Check only one name has been passed
-                      if (length(object@name) != 1){
-                        msg <- paste0("Name is length ",
-                                      length(object@name),
-                                      ". Should be 1.")
-                        errors <- c(errors, msg)
-                      }
-
-                      # Check for uniqueness in variable names
-                      if (length(object@varnames) != length(unique(object@varnames))){
-                        msg <- paste0("All variables need to have unique names.")
-                        errors <- c(errors, msg)
-                      }
-
-                      # Check for finite values and absence of NA
-                      if (any(!is.finite(object@values))) {
-                        msg <- "All values must be finite (numeric, not NA, Inf, or -Inf)."
-                        errors <- c(errors, msg)
-                      }
-
-                      # Check correct number of values
                       length_vars <- length(object@varnames)
+
+                      # 1. Check only one name has been passed
+                      if (length(object@name) != 1) {
+                        msg <- paste0("Slot 'name' must have length 1, not ", length(object@name), ".")
+                        errors <- c(errors, msg)
+                      }
+
+                      # 2. Check for uniqueness in variable names
+                      if (length_vars != length(unique(object@varnames))) {
+                        msg <- "All variable names in varnames must be unique."
+                        errors <- c(errors, msg)
+                      }
+
+                      # 3. Check that the number of values matches the number of variables
                       if (length_vars != length(object@values)) {
-                        msg <- paste0("Values is length ",
-                                      length(object@values),
-                                      ".  Should be ",
-                                      length_vars,
-                                      ".")
+                        msg <- paste0("Slot 'values' has length ", length(object@values),
+                                      ". It should match the number of variables: ", length_vars, ".")
                         errors <- c(errors, msg)
+                      } else {
+                        # 4. Check for finite values (only if lengths match)
+                        # This provides a more helpful error by listing the problem indices.
+                        if (any(!is.finite(object@values))) {
+                          non_finite_idx <- which(!is.finite(object@values))
+                          msg <- paste0("All 'values' must be finite (i.e. not NA, Inf, or -Inf). ",
+                                        "Problem found at indices: ", paste(non_finite_idx, collapse = ", "), ".")
+                          errors <- c(errors, msg)
+                        }
                       }
 
-                      # Check for finite values and absence of NA
-                      if (any(!is.finite(object@values))) {
-                        msg <- "All values must be finite (numeric, not NA, Inf, or -Inf)."
-                        # Find which ones are not finite to potentially make msg more specific
-                        # non_finite_idx <- which(!is.finite(object@values))
-                        # msg <- paste0("Non-finite values found at indices: ", paste(non_finite_idx, collapse=", "))
-                        errors <- c(errors, msg)
-                      }
-
+                      # Return TRUE if no errors were found, otherwise return the error messages
                       if (length(errors) == 0) TRUE else errors
                     }
 )
