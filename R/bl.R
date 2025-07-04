@@ -1,5 +1,6 @@
 #' Union class for matrix or numeric
-#' @noRd # Usually don't need to export the union itself
+#' @keywords internal
+#' @noRd
 setClassUnion("MatrixOrNumeric", c("matrix", "numeric"))
 
 #' An S4 class to represent a Bayes linear object.
@@ -21,9 +22,6 @@ setClassUnion("MatrixOrNumeric", c("matrix", "numeric"))
 #'                       0.5, 1, 0.5,
 #'                       0.5, 0.5, 1), 3, 3))
 #'
-# It's good practice to define the class union if it doesn't exist yet
-# setClassUnion("MatrixOrNumeric", c("Matrix", "numeric"))
-
 bl <- setClass('bl',
                slots = list(
                  name = 'character',

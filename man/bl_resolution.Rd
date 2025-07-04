@@ -12,10 +12,10 @@ bl_resolution(x, y)
 \item{y}{A 'bl' object representing the \strong{adjusted} beliefs (after adjustment).}
 }
 \value{
-A named numeric vector of resolutions, ideally on the \link{0, 1} scale.
+A named numeric vector of resolutions, ideally on the 0-1 scale.
 Names correspond to the variable names in the input objects. Issues a
 warning if any prior variances are non-positive or if calculated
-resolutions fall outside \link{0, 1}.
+resolutions fall outside 0-1.
 }
 \description{
 Computes the resolution for each variable, defined as

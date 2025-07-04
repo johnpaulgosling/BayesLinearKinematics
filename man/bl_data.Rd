@@ -14,7 +14,7 @@ An S4 class to represent data for a Bayes linear adjustment.
 
 \item{\code{varnames}}{A character vector of variable names.}
 
-\item{\code{values}}{A numeric vector of observed values.}
+\item{\code{values}}{A numeric vector of observed values (must be finite and not NA).}
 }}
 
 \examples{
