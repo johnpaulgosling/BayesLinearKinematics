@@ -1,3 +1,21 @@
+# BayesLinearKinematics 0.2.11 (2025-07-07)
+
+## MAJOR CHANGES
+
+* Utilised the `pkgdown` package to create a website for the package.
+
+## NEW FEATURES
+
+* Added a website.
+
+## BUG FIXES
+
+* None
+
+## DEPRECATED FEATURES
+
+* None
+
 # BayesLinearKinematics 0.2.10 (2025-06-30)
 
 ## MAJOR CHANGES

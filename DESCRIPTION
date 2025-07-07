@@ -1,7 +1,7 @@
 Package: BayesLinearKinematics
 Title: Bayes linear kinematics
-Version: 0.2.10
-Date: 2025-06-30
+Version: 0.2.11
+Date: 2025-07-07
 Authors@R: 
     person("John Paul", "Gosling", , "johnpaulgosling@gmail.com", role = c("aut", "cre"))
 Description: Implementation of Bayes linear (kinematic) adjustments.
@@ -19,3 +19,4 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://johnpaulgosling.github.io/BayesLinearKinematics/
