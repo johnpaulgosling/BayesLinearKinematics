@@ -1,3 +1,21 @@
+# BayesLinearKinematics 0.2.12 (2025-07-08)
+
+## MAJOR CHANGES
+
+* None
+
+## NEW FEATURES
+
+* None
+
+## BUG FIXES
+
+* Refactored all code using linter.
+
+## DEPRECATED FEATURES
+
+* None
+
 # BayesLinearKinematics 0.2.11 (2025-07-07)
 
 ## MAJOR CHANGES

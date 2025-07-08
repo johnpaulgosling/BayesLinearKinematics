@@ -7,8 +7,10 @@
 #' adjustment process for each variable. It should ideally range from 0 (no
 #' variance reduction) to 1 (variance reduced to zero).
 #'
-#' @param x A 'bl' object representing the **prior** beliefs (before adjustment).
-#' @param y A 'bl' object representing the **adjusted** beliefs (after adjustment).
+#' @param x A 'bl' object representing the **prior** beliefs
+#' (before adjustment).
+#' @param y A 'bl' object representing the **adjusted** beliefs
+#' (after adjustment).
 #'
 #' @return A named numeric vector of resolutions, ideally on the 0-1 scale.
 #'   Names correspond to the variable names in the input objects. Issues a
@@ -18,20 +20,28 @@
 #' @importFrom methods is # For class checking
 #' @examples
 #' # Prior Beliefs
-#' bl_prior <- bl(name = 'Prior State',
-#'                varnames = c('P1', 'P2', 'P3'),
-#'                expectation = c(10, 20, 30),
-#'                covariance = matrix(c(4, 1, 0.5,
-#'                                      1, 5, 1,
-#'                                      0.5, 1, 6), 3, 3))
+#' bl_prior <- bl(
+#'   name = "Prior State",
+#'   varnames = c("P1", "P2", "P3"),
+#'   expectation = c(10, 20, 30),
+#'   covariance = matrix(c(
+#'     4, 1, 0.5,
+#'     1, 5, 1,
+#'     0.5, 1, 6
+#'   ), 3, 3)
+#' )
 #'
 #' # Adjusted Beliefs (after some adjustment process)
-#' bl_adjusted <- bl(name = 'Adjusted State',
-#'                   varnames = c('P1', 'P2', 'P3'),
-#'                   expectation = c(11, 20.5, 29),
-#'                   covariance = matrix(c(2, 0.5, 0.2,
-#'                                         0.5, 2.5, 0.5,
-#'                                         0.2, 0.5, 3), 3, 3))
+#' bl_adjusted <- bl(
+#'   name = "Adjusted State",
+#'   varnames = c("P1", "P2", "P3"),
+#'   expectation = c(11, 20.5, 29),
+#'   covariance = matrix(c(
+#'     2, 0.5, 0.2,
+#'     0.5, 2.5, 0.5,
+#'     0.2, 0.5, 3
+#'   ), 3, 3)
+#' )
 #'
 #' # Calculate resolution
 #' resolutions <- bl_resolution(bl_prior, bl_adjusted)
@@ -41,11 +51,15 @@
 #' # 0.5 0.5 0.5
 #'
 #' # Example with potential issues (e.g., zero prior variance - may warn/error)
-#' bl_prior_zero_var <- bl(name = 'Prior with Zero Var',
-#'                         varnames = 'Z', expectation = 0, covariance = 0)
-#' bl_adjusted_zero_var <- bl(name = 'Adjusted with Zero Var',
-#'                            varnames = 'Z', expectation = 1, covariance = 0.1)
-#' # try(bl_resolution(bl_prior_zero_var, bl_adjusted_zero_var)) # Likely causes warning/error
+#' bl_prior_zero_var <- bl(
+#'   name = "Prior with Zero Var",
+#'   varnames = "Z", expectation = 0, covariance = 0
+#' )
+#' bl_adjusted_zero_var <- bl(
+#'   name = "Adjusted with Zero Var",
+#'   varnames = "Z", expectation = 1, covariance = 0.1
+#' )
+#' # try(bl_resolution(bl_prior_zero_var, bl_adjusted_zero_var))
 #'
 bl_resolution <- function(x, y) {
   errors <- character()
@@ -70,34 +84,45 @@ bl_resolution <- function(x, y) {
   n_vars_x <- length(x@varnames)
   n_vars_y <- length(y@varnames)
   if (n_vars_x != n_vars_y) {
-    errors <- c(errors, paste0("Objects contain different numbers of variables (x:",
-                               n_vars_x, ", y:", n_vars_y, ")."))
+    errors <- c(errors, paste0(
+      "Objects contain different numbers of variables (x:",
+      n_vars_x, ", y:", n_vars_y, ")."
+    ))
   } else if (n_vars_x == 0) {
     errors <- c(errors, "Input objects contain no variables.")
   } else {
     # If counts match and > 0, check names and order match
     if (any(x@varnames != y@varnames)) {
-      errors <- c(errors, "Variable names or their order do not match between objects.")
+      errors <- c(errors,
+                  "Variable names or their order do not match between objects.")
     }
   }
 
   # Check covariance types compatibility
-  is_scalar_x <- !is.matrix(x@covariance) && is.numeric(x@covariance) && length(x@covariance) == 1
-  is_scalar_y <- !is.matrix(y@covariance) && is.numeric(y@covariance) && length(y@covariance) == 1
+  is_scalar_x <- !is.matrix(x@covariance) && is.numeric(x@covariance) &&
+    length(x@covariance) == 1
+  is_scalar_y <- !is.matrix(y@covariance) && is.numeric(y@covariance) &&
+    length(y@covariance) == 1
 
   if (n_vars_x == 1) {
     if (!is_scalar_x && !identical(dim(x@covariance), c(1L, 1L))) {
-      errors <- c(errors, "Object 'x' has 1 variable name but covariance is not scalar or 1x1 matrix.")
+      errors <- c(errors,
+                  paste0("Object 'x' has 1 variable name but covariance is ",
+                         "not scalar or 1x1 matrix."))
     }
     if (!is_scalar_y && !identical(dim(y@covariance), c(1L, 1L))) {
-      errors <- c(errors, "Object 'y' has 1 variable name but covariance is not scalar or 1x1 matrix.")
+      errors <- c(errors,
+                  paste0("Object 'y' has 1 variable name but covariance is",
+                  " not scalar or 1x1 matrix."))
     }
   } else if (n_vars_x > 1) {
     if (is_scalar_x || !is.matrix(x@covariance)) {
-      errors <- c(errors, "Object 'x' has >1 variable name but covariance is not a matrix.")
+      errors <- c(errors, paste0("Object 'x' has >1 variable name but ",
+            "covariance is not a matrix."))
     }
     if (is_scalar_y || !is.matrix(y@covariance)) {
-      errors <- c(errors, "Object 'y' has >1 variable name but covariance is not a matrix.")
+      errors <- c(errors, paste0("Object 'y' has >1 variable name but ",
+                                 "covariance is not a matrix."))
     }
   }
 
@@ -107,9 +132,6 @@ bl_resolution <- function(x, y) {
   }
 
   # --- 2. Extract Variances and Check Prior Variance ---
-
-  prior_vars <- NULL
-  posterior_vars <- NULL # Renaming internal variable for clarity, maps to 'adjusted'
 
   if (n_vars_x == 1) {
     prior_vars <- as.numeric(x@covariance)
@@ -124,8 +146,11 @@ bl_resolution <- function(x, y) {
     bad_indices <- which(prior_vars <= TOLERANCE)
     bad_vars <- x@varnames[bad_indices]
     # Stop execution as resolution is ill-defined
-    stop("Resolution calculation failed: Prior variance is zero or negative for variable(s): ",
-         paste(bad_vars, collapse=", "), ".")
+    stop(
+      paste0("Resolution calculation failed: Prior variance is ",
+             "zero or negative for variable(s): "),
+      paste(bad_vars, collapse = ", "), "."
+    )
   }
 
   # --- 3. Calculate Resolution ---

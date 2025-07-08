@@ -20,11 +20,15 @@ An S4 class to represent a Bayes linear object.
 }}
 
 \examples{
-bl1 <- bl(name = 'Example 1',
-          varnames = c('x', 'y', 'z'),
-          expectation = c(1, 2, 3),
-          covariance = matrix(c(1, 0.5, 0.5,
-                      0.5, 1, 0.5,
-                      0.5, 0.5, 1), 3, 3))
+bl1 <- bl(
+  name = "Example 1",
+  varnames = c("x", "y", "z"),
+  expectation = c(1, 2, 3),
+  covariance = matrix(c(
+    1, 0.5, 0.5,
+    0.5, 1, 0.5,
+    0.5, 0.5, 1
+  ), 3, 3)
+)
 
 }

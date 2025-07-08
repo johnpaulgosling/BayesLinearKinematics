@@ -6,56 +6,76 @@
 #' @return Adjusted bl object.
 #' @export
 #' @examples
-#' bl1 <- bl(name = 'Variables',
-#'         varnames = c('x', 'y', 'z'),
-#'         expectation = c(1, 2, 3),
-#'         covariance = matrix(c(1, 0.5, 0.5,
-#'         0.5, 1, 0.5,
-#'         0.5, 0.5, 1), 3, 3))
-#'         
-#' bl2 <- bl_data(name = 'Data',
-#'            varnames = c('x', 'y'),
-#'            values = c(1.1, 2.1))
+#' bl1 <- bl(
+#'   name = "Variables",
+#'   varnames = c("x", "y", "z"),
+#'   expectation = c(1, 2, 3),
+#'   covariance = matrix(c(
+#'     1, 0.5, 0.5,
+#'     0.5, 1, 0.5,
+#'     0.5, 0.5, 1
+#'   ), 3, 3)
+#' )
+#'
+#' bl2 <- bl_data(
+#'   name = "Data",
+#'   varnames = c("x", "y"),
+#'   values = c(1.1, 2.1)
+#' )
 #'
 #' bl_adjust(bl1, bl2)
 bl_adjust <- function(x,
-                      y){
+                      y) {
   # Somewhere to store error messages
   errors <- character()
 
   # Check x and y are BL objects
-  if (class(x)[1] != 'bl'){
-    msg <- paste0("The class of x is ",
-                  class(x)[1],
-                  ".  It should be bl.")
+  if (class(x)[1] != "bl") {
+    msg <- paste0(
+      "The class of x is ",
+      class(x)[1],
+      ".  It should be bl."
+    )
     errors <- c(errors, msg)
   }
-  if (class(y)[1] != 'bl' & class(y)[1] != 'bl_data'){
-    msg <- paste0("The class of y is ",
-                  class(y)[1],
-                  ".  It should be bl or bl_data.")
+  if (class(y)[1] != "bl" && class(y)[1] != "bl_data") {
+    msg <- paste0(
+      "The class of y is ",
+      class(y)[1],
+      ".  It should be bl or bl_data."
+    )
     errors <- c(errors, msg)
   }
 
   # Return any errors
-  if (length(errors) > 0) stop(paste(errors,
-                                     '\n  '))
+  if (length(errors) > 0) {
+    stop(paste(
+      errors,
+      "\n  "
+    ))
+  }
 
   # Check that all the y variables are in x
-  if(!(all(y@varnames %in% x@varnames))){
+  if (!(all(y@varnames %in% x@varnames))) {
     msg <- paste0("The variables to be adjusted are not in x.")
     errors <- c(errors, msg)
   }
 
   # Return any errors
-  if (length(errors) > 0) stop(paste(errors,
-                                     '\n  '))
+  if (length(errors) > 0) {
+    stop(paste(
+      errors,
+      "\n  "
+    ))
+  }
 
   # Simple Bayes linear update if y is of class bl_data
-  if (class(y)[1] == 'bl_data'){
+  if (class(y)[1] == "bl_data") {
     # Pick out mean and covariance from x that corresponds with y
-    x_indices <- sapply(y@varnames,
-                        function(x_names) which(x@varnames %in% x_names))
+    x_indices <- sapply(
+      y@varnames,
+      function(x_names) which(x@varnames %in% x_names)
+    )
     y_expectation <- x@expectation[x_indices]
     y_variance <- x@covariance[x_indices, x_indices]
     xy_covariance <- x@covariance[, x_indices]
@@ -72,16 +92,20 @@ bl_adjust <- function(x,
       xy_covariance %*% inv_y_variance %*% t(xy_covariance)
 
     # Set up new bl object with adjusted mean and variance
-    x_adj_y <- bl(name = paste0(x@name,
-                                '_adj_',
-                                y@name),
-                  varnames = x@varnames,
-                  expectation = as.numeric(adj_expectation),
-                  covariance = (t(adj_variance)+adj_variance)/2) # Forcing symmetry
+    x_adj_y <- bl(
+      name = paste0(
+        x@name,
+        "_adj_",
+        y@name
+      ),
+      varnames = x@varnames,
+      expectation = as.numeric(adj_expectation),
+      covariance = (t(adj_variance) + adj_variance) / 2
+    ) # Forcing symmetry
   }
 
   # Bayes linear kinematics update if y is of class bl
-  if (class(y)[1] == 'bl'){
+  if (class(y)[1] == "bl") {
     # Pick out mean and covariance from x that corresponds with y
     x_indices <- which(x@varnames %in% y@varnames)
     y_expectation <- x@expectation[x_indices]
@@ -103,12 +127,16 @@ bl_adjust <- function(x,
       cov_var_mult %*% y@covariance %*% t(cov_var_mult)
 
     # Set up new bl object with adjusted mean and variance
-    x_adj_y <- bl(name = paste0(x@name,
-                                '_adj_',
-                                y@name),
-                  varnames = x@varnames,
-                  expectation = as.numeric(adj_expectation),
-                  covariance = (t(adj_variance)+adj_variance)/2) # Forcing symmetry
+    x_adj_y <- bl(
+      name = paste0(
+        x@name,
+        "_adj_",
+        y@name
+      ),
+      varnames = x@varnames,
+      expectation = as.numeric(adj_expectation),
+      covariance = (t(adj_variance) + adj_variance) / 2
+    ) # Forcing symmetry
   }
 
   return(x_adj_y)

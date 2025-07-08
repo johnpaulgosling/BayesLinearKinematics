@@ -1,9 +1,11 @@
 Package: BayesLinearKinematics
 Title: Bayes linear kinematics
-Version: 0.2.11
-Date: 2025-07-07
+Version: 0.2.12
+Date: 2025-07-08
 Authors@R: 
-    person("John Paul", "Gosling", , "johnpaulgosling@gmail.com", role = c("aut", "cre"))
+    person("John Paul", "Gosling", , "john-paul.gosling@durham.ac.uk",
+           role = c("aut","cre"),
+           comment = c(ORCID = "0000-0002-4072-3022"))
 Description: Implementation of Bayes linear (kinematic) adjustments.
 License: GPL (>= 3)
 Encoding: UTF-8

@@ -18,14 +18,16 @@
 Invisibly returns the original object \code{x}.
 }
 \description{
-Displays the observed values stored in a Bayes linear data ('bl_data') object,
-allowing control over the number of digits shown. Called automatically when
-an object of class 'bl_data' is printed to the console.
+Displays the observed values stored in a Bayes linear data ('bl_data')
+object allowing control over the number of digits shown. Called automatically
+when an object of class 'bl_data' is printed to the console.
 }
 \examples{
-data1 <- bl_data(name = 'Experiment A',
-                 varnames = c('Temp', 'Pressure'),
-                 values = c(25.123, 1013.456))
+data1 <- bl_data(
+  name = "Experiment A",
+  varnames = c("Temp", "Pressure"),
+  values = c(25.123, 1013.456)
+)
 data1
 print(data1, digits = 4)
 

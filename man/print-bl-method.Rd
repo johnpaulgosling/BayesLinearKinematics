@@ -23,12 +23,16 @@ over the number of digits shown. Called automatically when an object
 of class 'bl' is printed to the console.
 }
 \examples{
-bl1 <- bl(name = 'Example 1',
-          varnames = c('x', 'y', 'z'),
-          expectation = c(1.12345, 2.0, 3.987),
-          covariance = matrix(c(1.555, 0.5, 0.25,
-                                0.5, 1.111, 0.5,
-                                0.25, 0.5, 1.0), 3, 3))
+bl1 <- bl(
+  name = "Example 1",
+  varnames = c("x", "y", "z"),
+  expectation = c(1.12345, 2.0, 3.987),
+  covariance = matrix(c(
+    1.555, 0.5, 0.25,
+    0.5, 1.111, 0.5,
+    0.25, 0.5, 1.0
+  ), 3, 3)
+)
 
 # Default printing (uses options("digits"))
 bl1

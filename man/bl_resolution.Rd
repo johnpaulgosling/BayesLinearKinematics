@@ -7,9 +7,11 @@
 bl_resolution(x, y)
 }
 \arguments{
-\item{x}{A 'bl' object representing the \strong{prior} beliefs (before adjustment).}
+\item{x}{A 'bl' object representing the \strong{prior} beliefs
+(before adjustment).}
 
-\item{y}{A 'bl' object representing the \strong{adjusted} beliefs (after adjustment).}
+\item{y}{A 'bl' object representing the \strong{adjusted} beliefs
+(after adjustment).}
 }
 \value{
 A named numeric vector of resolutions, ideally on the 0-1 scale.
@@ -28,20 +30,28 @@ variance reduction) to 1 (variance reduced to zero).
 }
 \examples{
 # Prior Beliefs
-bl_prior <- bl(name = 'Prior State',
-               varnames = c('P1', 'P2', 'P3'),
-               expectation = c(10, 20, 30),
-               covariance = matrix(c(4, 1, 0.5,
-                                     1, 5, 1,
-                                     0.5, 1, 6), 3, 3))
+bl_prior <- bl(
+  name = "Prior State",
+  varnames = c("P1", "P2", "P3"),
+  expectation = c(10, 20, 30),
+  covariance = matrix(c(
+    4, 1, 0.5,
+    1, 5, 1,
+    0.5, 1, 6
+  ), 3, 3)
+)
 
 # Adjusted Beliefs (after some adjustment process)
-bl_adjusted <- bl(name = 'Adjusted State',
-                  varnames = c('P1', 'P2', 'P3'),
-                  expectation = c(11, 20.5, 29),
-                  covariance = matrix(c(2, 0.5, 0.2,
-                                        0.5, 2.5, 0.5,
-                                        0.2, 0.5, 3), 3, 3))
+bl_adjusted <- bl(
+  name = "Adjusted State",
+  varnames = c("P1", "P2", "P3"),
+  expectation = c(11, 20.5, 29),
+  covariance = matrix(c(
+    2, 0.5, 0.2,
+    0.5, 2.5, 0.5,
+    0.2, 0.5, 3
+  ), 3, 3)
+)
 
 # Calculate resolution
 resolutions <- bl_resolution(bl_prior, bl_adjusted)
@@ -51,10 +61,14 @@ print(resolutions)
 # 0.5 0.5 0.5
 
 # Example with potential issues (e.g., zero prior variance - may warn/error)
-bl_prior_zero_var <- bl(name = 'Prior with Zero Var',
-                        varnames = 'Z', expectation = 0, covariance = 0)
-bl_adjusted_zero_var <- bl(name = 'Adjusted with Zero Var',
-                           varnames = 'Z', expectation = 1, covariance = 0.1)
-# try(bl_resolution(bl_prior_zero_var, bl_adjusted_zero_var)) # Likely causes warning/error
+bl_prior_zero_var <- bl(
+  name = "Prior with Zero Var",
+  varnames = "Z", expectation = 0, covariance = 0
+)
+bl_adjusted_zero_var <- bl(
+  name = "Adjusted with Zero Var",
+  varnames = "Z", expectation = 1, covariance = 0.1
+)
+# try(bl_resolution(bl_prior_zero_var, bl_adjusted_zero_var))
 
 }

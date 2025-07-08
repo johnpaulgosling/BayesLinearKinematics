@@ -9,16 +9,17 @@ vignette: >
 
 ```{r setup, include = FALSE}
 # Chunk Options:
-# include = FALSE: Prevents code and results from appearing in the finished file.
+# include = FALSE: Prevents code and results from appearing in the file.
 #                  Useful for setup code.
 # collapse = TRUE: Merges R code and its output into a single block,
 #                  which is often cleaner for vignettes.
-# comment = "#>":  Standard prefix for R output lines. Makes output look like comments.
+# comment = "#>":  Standard prefix for output lines
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.width = 7,
-  fig.height = 6.5)
+  fig.height = 6.5
+)
 
 # Load the package
 library(BayesLinearKinematics)
@@ -46,14 +47,19 @@ Let's define prior beliefs for three variables, $x$, $y$ and $z$. We expect them
 
 ```{r create_bl}
 # Define prior beliefs using the bl() constructor
-bl_prior <- bl(name = 'Prior Beliefs',        # A descriptive name for this belief set
-               varnames = c('x', 'y', 'z'),   # Names of the variables
-               expectation = c(1, 2, 3),      # Prior expected values E[x], E[y], E[z]
-               covariance = matrix(c(1.0, 0.5, 0.2, # Covariance matrix:
-                                     0.5, 1.0, 0.5, #   [Var(x) Cov(y,x) Cov(z,x)]
-                                     0.2, 0.5, 1.0),  # [Cov(x,y) Var(y) Cov(z,y)]
-                                   nrow = 3, ncol = 3) #[Cov(x,z) Cov(y,z) Var(z)]
-              )
+bl_prior <- bl(
+  name = "Prior Beliefs", # A descriptive name for this belief set
+  varnames = c("x", "y", "z"), # Names of the variables
+  expectation = c(1, 2, 3), # Prior expected values E[x], E[y], E[z]
+  covariance = matrix(
+    c(
+      1.0, 0.5, 0.2, # Covariance matrix:
+      0.5, 1.0, 0.5, #   [Var(x) Cov(y,x) Cov(z,x)]
+      0.2, 0.5, 1.0
+    ), # [Cov(x,y) Var(y) Cov(z,y)]
+    nrow = 3, ncol = 3
+  ) # [Cov(x,z) Cov(y,z) Var(z)]
+)
 
 # Print the object - uses the custom print method defined for the 'bl' class
 # The 'digits' argument controls the rounding in the output
@@ -84,9 +90,11 @@ Suppose we observe values for some of the variables. We represent this using the
 
 ```{r create_bl_data}
 # Define observed data using the bl_data() constructor
-observed_data <- bl_data(name = 'Observations',      # A descriptive name for the data
-                         varnames = c('x', 'y'),     # Names of the observed variables
-                         values = c(1.1, 2.1))       # The observed values
+observed_data <- bl_data(
+  name = "Observations", # A descriptive name for the data
+  varnames = c("x", "y"), # Names of the observed variables
+  values = c(1.1, 2.1)
+) # The observed values
 
 # Print the data object - uses the custom print method for 'bl_data'
 print(observed_data)
@@ -129,13 +137,17 @@ Let's define a second belief structure, perhaps representing information about $
 
 ```{r create_bl_kinematics}
 # Define a second set of beliefs (e.g., from another expert or model)
-bl_info <- bl(name = "Sensor Info",
-              varnames = c('y', 'z'),          # Variables covered by this info
-              expectation = c(2.2, 2.8),      # Expectations from this source
-              covariance = matrix(c(0.5, 0.1, # Covariance structure from this source
-                                    0.1, 0.6), nrow=2, ncol=2))
+bl_info <- bl(
+  name = "Sensor Info",
+  varnames = c("y", "z"), # Variables covered by this info
+  expectation = c(2.2, 2.8), # Expectations from this source
+  covariance = matrix(c(
+    0.5, 0.1, # Covariance structure from this source
+    0.1, 0.6
+  ), nrow = 2, ncol = 2)
+)
 
-print(bl_info, digits=2)
+print(bl_info, digits = 2)
 ```
 
 Now, we adjust our original `bl_prior` using this `bl_info`. The adjustment combines the information from both sources.
@@ -147,7 +159,7 @@ Now, we adjust our original `bl_prior` using this `bl_info`. The adjustment comb
 bl_adjusted_kinematics <- bl_adjust(x = bl_prior, y = bl_info)
 
 # Print the result of the kinematic adjustment
-print(bl_adjusted_kinematics, digits=3)
+print(bl_adjusted_kinematics, digits = 3)
 
 # Plot the resulting covariance after kinematic adjustment
 plot(bl_adjusted_kinematics)
@@ -175,8 +187,10 @@ A resolution close to 1 means the variance for that variable was greatly reduced
 
 We can also calculate the resolution resulting from the kinematic adjustment:
 ```{r calculate_resolution_kinematics}
-# Calculate the resolution comparing the prior to the kinematically-adjusted beliefs
-resolution_values_kinematics <- bl_resolution(x = bl_prior, y = bl_adjusted_kinematics)
+# Calculate the resolution comparing the prior to the 
+# kinematically-adjusted beliefs
+resolution_values_kinematics <- bl_resolution(x = bl_prior,
+                                              y = bl_adjusted_kinematics)
 
 # Print the resolutions
 print(round(resolution_values_kinematics, 3))
@@ -191,13 +205,13 @@ Sometimes you might want to focus on a subset of variables from a `bl` or `bl_da
 # Extract beliefs only for 'x' and 'z' from the data-adjusted object
 # x: The 'bl' or 'bl_data' object to subset.
 # varnames: A character vector of variable names to keep.
-bl_subset_xz <- bl_subset(bl_adjusted_data, varnames = c('x', 'z'))
+bl_subset_xz <- bl_subset(bl_adjusted_data, varnames = c("x", "z"))
 
 print(bl_subset_xz, digits = 3)
 
 # Extract data only for 'x' from the original observations
 # (This is a simple case but demonstrates subsetting bl_data)
-data_subset_x <- bl_subset(observed_data, varnames = 'x')
+data_subset_x <- bl_subset(observed_data, varnames = "x")
 
 print(data_subset_x)
 ```

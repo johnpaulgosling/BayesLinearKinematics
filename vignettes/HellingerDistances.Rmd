@@ -10,17 +10,18 @@ vignette: >
 ```{r setup, include = FALSE}
 # Chunk Options:
 knitr::opts_chunk$set(
- collapse = TRUE,
- comment = "#>",
- fig.width = 7,
- fig.height = 6.5)
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 6.5
+)
 
 # Load the package
 library(BayesLinearKinematics)
 
 # Load MASS for ginv used in hellinger_squared for multivariate case
 # Ensure MASS is listed as a dependency if you haven't already
-library(MASS) 
+library(MASS)
 
 # Store package version
 pkg_version <- packageVersion("BayesLinearKinematics")
@@ -61,13 +62,19 @@ First, we define belief_A perhaps representing an initial assessment.
 
 ```{r}
 # Define first belief specification
-belief_A <- bl(name = 'Belief A',
-              varnames = c('x', 'y', 'z'),
-              expectation = c(1, 2, 3),
-              covariance = matrix(c(1.0, 0.5, 0.2,
-                                    0.5, 1.0, 0.5,
-                                    0.2, 0.5, 1.0),
-                                  nrow = 3, ncol = 3))
+belief_A <- bl(
+  name = "Belief A",
+  varnames = c("x", "y", "z"),
+  expectation = c(1, 2, 3),
+  covariance = matrix(
+    c(
+      1.0, 0.5, 0.2,
+      0.5, 1.0, 0.5,
+      0.2, 0.5, 1.0
+    ),
+    nrow = 3, ncol = 3
+  )
+)
 
 belief_A
 plot(belief_A)
@@ -77,13 +84,19 @@ Now, we define `belief_B` representing an alternative assessment perhaps from a 
 
 ```{r}
 # Define second belief specification (different expectation and covariance)
-belief_B <- bl(name = 'Belief B',
-              varnames = c('x', 'y', 'z'),
-              expectation = c(1.2, 2.1, 2.9), # Slightly different means
-              covariance = matrix(c(1.1, 0.4, 0.3, # Slightly different covariance
-                                    0.4, 0.9, 0.6,
-                                    0.3, 0.6, 1.2),
-                                  nrow = 3, ncol = 3))
+belief_B <- bl(
+  name = "Belief B",
+  varnames = c("x", "y", "z"),
+  expectation = c(1.2, 2.1, 2.9), # Slightly different means
+  covariance = matrix(
+    c(
+      1.1, 0.4, 0.3, # Slightly different covariance
+      0.4, 0.9, 0.6,
+      0.3, 0.6, 1.2
+    ),
+    nrow = 3, ncol = 3
+  )
+)
 
 belief_B
 plot(belief_B)
@@ -98,8 +111,10 @@ Now, we calculate the squared Hellinger distance between `belief_A` and `belief_
 dist_A_B <- hellinger_squared(x = belief_A, y = belief_B)
 
 # Print the result
-cat(paste("Squared Hellinger distance between Belief A and Belief B:",
-          round(dist_A_B, 4)))
+cat(paste(
+  "Squared Hellinger distance between Belief A and Belief B:",
+  round(dist_A_B, 4)
+))
 ```
 
 The resulting value (likely small but non-zero) quantifies the difference between these two belief specifications under the normality assumption. A value closer to 0 indicates higher similarity.
@@ -108,18 +123,24 @@ Let's also quickly check the univariate case.
 
 ```{r}
 # Univariate beliefs
-belief_X1 <- bl(name="X1", varnames="x", expectation=1, covariance=matrix(1))
-belief_X2 <- bl(name="X2", varnames="x", expectation=1.5, covariance=matrix(1.2))
+belief_X1 <- bl(name = "X1", varnames = "x",
+                expectation = 1, covariance = matrix(1))
+belief_X2 <- bl(name = "X2", varnames = "x",
+                expectation = 1.5, covariance = matrix(1.2))
 
 dist_X1_X2 <- hellinger_squared(belief_X1, belief_X2)
 
-cat(paste("Squared Hellinger distance between Belief X1 and Belief X2:",
-          round(dist_X1_X2, 4)))
+cat(paste(
+  "Squared Hellinger distance between Belief X1 and Belief X2:",
+  round(dist_X1_X2, 4)
+))
 
 # Check distance to self (should be 0)
 dist_X1_X1 <- hellinger_squared(belief_X1, belief_X1)
-cat(paste("\nSquared Hellinger distance between Belief X1 and itself:",
-          round(dist_X1_X1, 4)))
+cat(paste(
+  "\nSquared Hellinger distance between Belief X1 and itself:",
+  round(dist_X1_X1, 4)
+))
 ```
 
 ## Measuring the Impact of Kinematic Adjustment
@@ -130,20 +151,30 @@ Let's reuse the prior beliefs (`bl_prior`) and the kinematic information (`bl_in
 
 ```{r}
 # Define prior beliefs (same as intro vignette)
-bl_prior <- bl(name = 'Prior Beliefs',
-               varnames = c('x', 'y', 'z'),
-               expectation = c(1, 2, 3),
-               covariance = matrix(c(1.0, 0.5, 0.2,
-                                     0.5, 1.0, 0.5,
-                                     0.2, 0.5, 1.0),
-                                   nrow = 3, ncol = 3))
+bl_prior <- bl(
+  name = "Prior Beliefs",
+  varnames = c("x", "y", "z"),
+  expectation = c(1, 2, 3),
+  covariance = matrix(
+    c(
+      1.0, 0.5, 0.2,
+      0.5, 1.0, 0.5,
+      0.2, 0.5, 1.0
+    ),
+    nrow = 3, ncol = 3
+  )
+)
 
 # Define kinematic information (same as intro vignette)
-bl_info <- bl(name = "Info",
-              varnames = c('y', 'z'),
-              expectation = c(2.2, 2.8),
-              covariance = matrix(c(0.5, 0.1,
-                                    0.1, 0.6), nrow=2, ncol=2))
+bl_info <- bl(
+  name = "Info",
+  varnames = c("y", "z"),
+  expectation = c(2.2, 2.8),
+  covariance = matrix(c(
+    0.5, 0.1,
+    0.1, 0.6
+  ), nrow = 2, ncol = 2)
+)
 
 # Perform the kinematic adjustment
 bl_adjusted_kinematics <- bl_adjust(x = bl_prior, y = bl_info)
@@ -163,11 +194,14 @@ plot(bl_prior)
 plot(bl_adjusted_kinematics)
 
 # Calculate squared Hellinger distance between prior and adjusted beliefs
-dist_kinematic <- hellinger_squared(x = bl_prior, y = bl_adjusted_kinematics)
+dist_kinematic <- hellinger_squared(x = bl_prior,
+                                    y = bl_adjusted_kinematics)
 
 # Print the result
-cat(paste("\nSquared Hellinger distance between Prior and Adjusted (Kinematic):",
-          round(dist_kinematic, 4)))
+cat(paste(
+  "\nSquared Hellinger distance between Prior and Adjusted (Kinematic):",
+  round(dist_kinematic, 4)
+))
 ```
 
 This distance quantifies the magnitude of the belief change induced by the kinematic update from `bl_info`. A larger value implies the kinematic information caused a greater shift in the belief state (mean and/or covariance structure) under the normality assumption.

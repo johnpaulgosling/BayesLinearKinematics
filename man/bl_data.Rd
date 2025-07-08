@@ -18,7 +18,9 @@ An S4 class to represent data for a Bayes linear adjustment.
 }}
 
 \examples{
-bl_data(name = 'Example 1',
-       varnames = c('x', 'y', 'z'),
-       values = c(1, 2, 3))
+bl_data(
+  name = "Example 1",
+  varnames = c("x", "y", "z"),
+  values = c(1, 2, 3)
+)
 }
