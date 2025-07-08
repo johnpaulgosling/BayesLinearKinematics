@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   BayesLinearKinematics_intro: BayesLinearKinematics_intro.html
   HellingerDistances: HellingerDistances.html
-last_built: 2025-07-07T16:50Z
+last_built: 2025-07-08T08:49Z
 urls:
   reference: https://johnpaulgosling.github.io/BayesLinearKinematics/reference
   article: https://johnpaulgosling.github.io/BayesLinearKinematics/articles

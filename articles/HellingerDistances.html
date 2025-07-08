@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BayesLinearKinematics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ class introduced in the “Introduction to the
 <code>BayesLinearKinematics</code> package” vignette.</p>
 <p>Note that this vignette was created using R version R version 4.5.1
 (2025-06-13) and the <code>BayesLinearKinematics</code> package version
-0.2.11.</p>
+0.2.12.</p>
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
@@ -142,13 +142,19 @@ differ.</p>
 assessment.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define first belief specification</span></span>
-<span><span class="va">belief_A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Belief A'</span>,</span>
-<span>              varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span><span class="op">)</span>,</span>
-<span>              expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>              covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>,</span>
-<span>                                    <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.5</span>,</span>
-<span>                                    <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
-<span>                                  nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">belief_A</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Belief A"</span>,</span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>,</span>
+<span>      <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.5</span>,</span>
+<span>      <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">belief_A</span></span>
 <span><span class="co">#&gt; Belief A </span></span>
@@ -171,13 +177,19 @@ assessment.</p>
 assessment perhaps from a different expert or model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define second belief specification (different expectation and covariance)</span></span>
-<span><span class="va">belief_B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Belief B'</span>,</span>
-<span>              varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span><span class="op">)</span>,</span>
-<span>              expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">2.1</span>, <span class="fl">2.9</span><span class="op">)</span>, <span class="co"># Slightly different means</span></span>
-<span>              covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="co"># Slightly different covariance</span></span>
-<span>                                    <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span>,</span>
-<span>                                    <span class="fl">0.3</span>, <span class="fl">0.6</span>, <span class="fl">1.2</span><span class="op">)</span>,</span>
-<span>                                  nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">belief_B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Belief B"</span>,</span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">2.1</span>, <span class="fl">2.9</span><span class="op">)</span>, <span class="co"># Slightly different means</span></span>
+<span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="fl">1.1</span>, <span class="fl">0.4</span>, <span class="fl">0.3</span>, <span class="co"># Slightly different covariance</span></span>
+<span>      <span class="fl">0.4</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span>,</span>
+<span>      <span class="fl">0.3</span>, <span class="fl">0.6</span>, <span class="fl">1.2</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">belief_B</span></span>
 <span><span class="co">#&gt; Belief B </span></span>
@@ -205,8 +217,10 @@ assessment perhaps from a different expert or model.</p>
 <span><span class="va">dist_A_B</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hellinger_squared.html">hellinger_squared</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">belief_A</span>, y <span class="op">=</span> <span class="va">belief_B</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print the result</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Squared Hellinger distance between Belief A and Belief B:"</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_A_B</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Squared Hellinger distance between Belief A and Belief B:"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_A_B</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Squared Hellinger distance between Belief A and Belief B: 0.0182</span></span></code></pre></div>
 <p>The resulting value (likely small but non-zero) quantifies the
 difference between these two belief specifications under the normality
@@ -214,19 +228,25 @@ assumption. A value closer to 0 indicates higher similarity.</p>
 <p>Let’s also quickly check the univariate case.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Univariate beliefs</span></span>
-<span><span class="va">belief_X1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"X1"</span>, varnames<span class="op">=</span><span class="st">"x"</span>, expectation<span class="op">=</span><span class="fl">1</span>, covariance<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">belief_X2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name<span class="op">=</span><span class="st">"X2"</span>, varnames<span class="op">=</span><span class="st">"x"</span>, expectation<span class="op">=</span><span class="fl">1.5</span>, covariance<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">belief_X1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"X1"</span>, varnames <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>                expectation <span class="op">=</span> <span class="fl">1</span>, covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">belief_X2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"X2"</span>, varnames <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>                expectation <span class="op">=</span> <span class="fl">1.5</span>, covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dist_X1_X2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hellinger_squared.html">hellinger_squared</a></span><span class="op">(</span><span class="va">belief_X1</span>, <span class="va">belief_X2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"Squared Hellinger distance between Belief X1 and Belief X2:"</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_X1_X2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Squared Hellinger distance between Belief X1 and Belief X2:"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_X1_X2</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Squared Hellinger distance between Belief X1 and Belief X2: 0.03</span></span>
 <span></span>
 <span><span class="co"># Check distance to self (should be 0)</span></span>
 <span><span class="va">dist_X1_X1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hellinger_squared.html">hellinger_squared</a></span><span class="op">(</span><span class="va">belief_X1</span>, <span class="va">belief_X1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"\nSquared Hellinger distance between Belief X1 and itself:"</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_X1_X1</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="st">"\nSquared Hellinger distance between Belief X1 and itself:"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_X1_X1</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Squared Hellinger distance between Belief X1 and itself: 0</span></span></code></pre></div>
 </div>
@@ -242,20 +262,30 @@ kinematic information (<code>bl_info</code>) from the introductory
 vignette examples.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define prior beliefs (same as intro vignette)</span></span>
-<span><span class="va">bl_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Prior Beliefs'</span>,</span>
-<span>               varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span><span class="op">)</span>,</span>
-<span>               expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>               covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>,</span>
-<span>                                     <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.5</span>,</span>
-<span>                                     <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span><span class="op">)</span>,</span>
-<span>                                   nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">bl_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Prior Beliefs"</span>,</span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>,</span>
+<span>      <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.5</span>,</span>
+<span>      <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Define kinematic information (same as intro vignette)</span></span>
-<span><span class="va">bl_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Info"</span>,</span>
-<span>              varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'y'</span>, <span class="st">'z'</span><span class="op">)</span>,</span>
-<span>              expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">2.8</span><span class="op">)</span>,</span>
-<span>              covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.1</span>,</span>
-<span>                                    <span class="fl">0.1</span>, <span class="fl">0.6</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">bl_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Info"</span>,</span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span>,</span>
+<span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">2.8</span><span class="op">)</span>,</span>
+<span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">0.5</span>, <span class="fl">0.1</span>,</span>
+<span>    <span class="fl">0.1</span>, <span class="fl">0.6</span></span>
+<span>  <span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Perform the kinematic adjustment</span></span>
 <span><span class="va">bl_adjusted_kinematics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_adjust.html">bl_adjust</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bl_prior</span>, y <span class="op">=</span> <span class="va">bl_info</span><span class="op">)</span></span>
@@ -314,11 +344,14 @@ common to both stages after adjustment i.e. the variables present in
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Calculate squared Hellinger distance between prior and adjusted beliefs</span></span>
-<span><span class="va">dist_kinematic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hellinger_squared.html">hellinger_squared</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bl_prior</span>, y <span class="op">=</span> <span class="va">bl_adjusted_kinematics</span><span class="op">)</span></span>
+<span><span class="va">dist_kinematic</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hellinger_squared.html">hellinger_squared</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bl_prior</span>,</span>
+<span>                                    y <span class="op">=</span> <span class="va">bl_adjusted_kinematics</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print the result</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"\nSquared Hellinger distance between Prior and Adjusted (Kinematic):"</span>,</span>
-<span>          <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_kinematic</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span></span>
+<span>  <span class="st">"\nSquared Hellinger distance between Prior and Adjusted (Kinematic):"</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">dist_kinematic</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Squared Hellinger distance between Prior and Adjusted (Kinematic): 0.0637</span></span></code></pre></div>
 <p>This distance quantifies the magnitude of the belief change induced

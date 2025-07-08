@@ -9,7 +9,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BayesLinearKinematics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,11 +54,13 @@
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A 'bl' object representing the <strong>prior</strong> beliefs (before adjustment).</p></dd>
+<dd><p>A 'bl' object representing the <strong>prior</strong> beliefs
+(before adjustment).</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>A 'bl' object representing the <strong>adjusted</strong> beliefs (after adjustment).</p></dd>
+<dd><p>A 'bl' object representing the <strong>adjusted</strong> beliefs
+(after adjustment).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -78,20 +80,28 @@ variance reduction) to 1 (variance reduced to zero).</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Prior Beliefs</span></span></span>
-<span class="r-in"><span><span class="va">bl_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Prior State'</span>,</span></span>
-<span class="r-in"><span>               varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'P1'</span>, <span class="st">'P2'</span>, <span class="st">'P3'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>               expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>               covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0.5</span>,</span></span>
-<span class="r-in"><span>                                     <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>                                     <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">6</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bl_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"Prior State"</span>,</span></span>
+<span class="r-in"><span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span>, <span class="st">"P3"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fl">4</span>, <span class="fl">1</span>, <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">6</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Adjusted Beliefs (after some adjustment process)</span></span></span>
-<span class="r-in"><span><span class="va">bl_adjusted</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Adjusted State'</span>,</span></span>
-<span class="r-in"><span>                  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'P1'</span>, <span class="st">'P2'</span>, <span class="st">'P3'</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">20.5</span>, <span class="fl">29</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>,</span></span>
-<span class="r-in"><span>                                        <span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="fl">0.5</span>,</span></span>
-<span class="r-in"><span>                                        <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bl_adjusted</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"Adjusted State"</span>,</span></span>
+<span class="r-in"><span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P1"</span>, <span class="st">"P2"</span>, <span class="st">"P3"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">20.5</span>, <span class="fl">29</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fl">2</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">0.5</span>, <span class="fl">2.5</span>, <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>    <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">3</span></span></span>
+<span class="r-in"><span>  <span class="op">)</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Calculate resolution</span></span></span>
 <span class="r-in"><span><span class="va">resolutions</span> <span class="op">&lt;-</span> <span class="fu">bl_resolution</span><span class="op">(</span><span class="va">bl_prior</span>, <span class="va">bl_adjusted</span><span class="op">)</span></span></span>
@@ -103,11 +113,15 @@ variance reduction) to 1 (variance reduced to zero).</p>
 <span class="r-in"><span><span class="co"># 0.5 0.5 0.5</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example with potential issues (e.g., zero prior variance - may warn/error)</span></span></span>
-<span class="r-in"><span><span class="va">bl_prior_zero_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Prior with Zero Var'</span>,</span></span>
-<span class="r-in"><span>                        varnames <span class="op">=</span> <span class="st">'Z'</span>, expectation <span class="op">=</span> <span class="fl">0</span>, covariance <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">bl_adjusted_zero_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Adjusted with Zero Var'</span>,</span></span>
-<span class="r-in"><span>                           varnames <span class="op">=</span> <span class="st">'Z'</span>, expectation <span class="op">=</span> <span class="fl">1</span>, covariance <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># try(bl_resolution(bl_prior_zero_var, bl_adjusted_zero_var)) # Likely causes warning/error</span></span></span>
+<span class="r-in"><span><span class="va">bl_prior_zero_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"Prior with Zero Var"</span>,</span></span>
+<span class="r-in"><span>  varnames <span class="op">=</span> <span class="st">"Z"</span>, expectation <span class="op">=</span> <span class="fl">0</span>, covariance <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">bl_adjusted_zero_var</span> <span class="op">&lt;-</span> <span class="fu"><a href="bl.html">bl</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"Adjusted with Zero Var"</span>,</span></span>
+<span class="r-in"><span>  varnames <span class="op">=</span> <span class="st">"Z"</span>, expectation <span class="op">=</span> <span class="fl">1</span>, covariance <span class="op">=</span> <span class="fl">0.1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># try(bl_resolution(bl_prior_zero_var, bl_adjusted_zero_var))</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

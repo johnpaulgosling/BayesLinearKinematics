@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BayesLinearKinematics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,7 +79,7 @@ prior beliefs, structuring observed data, performing adjustments, and
 evaluating the result.</p>
 <p>Note that this vignette was created using R version R version 4.5.1
 (2025-06-13) and the <code>BayesLinearKinematics</code> package version
-0.2.11.</p>
+0.2.12.</p>
 </div>
 <div class="section level2">
 <h2 id="defining-prior-beliefs-with-bl">1. Defining Prior Beliefs with <code>bl</code><a class="anchor" aria-label="anchor" href="#defining-prior-beliefs-with-bl"></a>
@@ -96,14 +96,19 @@ We expect them to be 1, 2 and 3 respectively. We also specify their
 covariance structure.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define prior beliefs using the bl() constructor</span></span>
-<span><span class="va">bl_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Prior Beliefs'</span>,        <span class="co"># A descriptive name for this belief set</span></span>
-<span>               varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span>, <span class="st">'z'</span><span class="op">)</span>,   <span class="co"># Names of the variables</span></span>
-<span>               expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,      <span class="co"># Prior expected values E[x], E[y], E[z]</span></span>
-<span>               covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="co"># Covariance matrix:</span></span>
-<span>                                     <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="co">#   [Var(x) Cov(y,x) Cov(z,x)]</span></span>
-<span>                                     <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span><span class="op">)</span>,  <span class="co"># [Cov(x,y) Var(y) Cov(z,y)]</span></span>
-<span>                                   nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="co">#[Cov(x,z) Cov(y,z) Var(z)]</span></span>
-<span>              <span class="op">)</span></span>
+<span><span class="va">bl_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Prior Beliefs"</span>, <span class="co"># A descriptive name for this belief set</span></span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span>, <span class="co"># Names of the variables</span></span>
+<span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>, <span class="co"># Prior expected values E[x], E[y], E[z]</span></span>
+<span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>      <span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="co"># Covariance matrix:</span></span>
+<span>      <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">0.5</span>, <span class="co">#   [Var(x) Cov(y,x) Cov(z,x)]</span></span>
+<span>      <span class="fl">0.2</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span></span>
+<span>    <span class="op">)</span>, <span class="co"># [Cov(x,y) Var(y) Cov(z,y)]</span></span>
+<span>    nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span> <span class="co"># [Cov(x,z) Cov(y,z) Var(z)]</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print the object - uses the custom print method defined for the 'bl' class</span></span>
 <span><span class="co"># The 'digits' argument controls the rounding in the output</span></span>
@@ -160,9 +165,11 @@ variables as
 (for data).</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define observed data using the bl_data() constructor</span></span>
-<span><span class="va">observed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_data.html">bl_data</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">'Observations'</span>,      <span class="co"># A descriptive name for the data</span></span>
-<span>                         varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'y'</span><span class="op">)</span>,     <span class="co"># Names of the observed variables</span></span>
-<span>                         values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span>       <span class="co"># The observed values</span></span>
+<span><span class="va">observed_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_data.html">bl_data</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Observations"</span>, <span class="co"># A descriptive name for the data</span></span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>, <span class="co"># Names of the observed variables</span></span>
+<span>  values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">2.1</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="co"># The observed values</span></span>
 <span></span>
 <span><span class="co"># Print the data object - uses the custom print method for 'bl_data'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">observed_data</span><span class="op">)</span></span>
@@ -252,13 +259,17 @@ and
 from another source (e.g., a different sensor or expert opinion).</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Define a second set of beliefs (e.g., from another expert or model)</span></span>
-<span><span class="va">bl_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Sensor Info"</span>,</span>
-<span>              varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'y'</span>, <span class="st">'z'</span><span class="op">)</span>,          <span class="co"># Variables covered by this info</span></span>
-<span>              expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">2.8</span><span class="op">)</span>,      <span class="co"># Expectations from this source</span></span>
-<span>              covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="co"># Covariance structure from this source</span></span>
-<span>                                    <span class="fl">0.1</span>, <span class="fl">0.6</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">2</span>, ncol<span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">bl_info</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl.html">bl</a></span><span class="op">(</span></span>
+<span>  name <span class="op">=</span> <span class="st">"Sensor Info"</span>,</span>
+<span>  varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="st">"z"</span><span class="op">)</span>, <span class="co"># Variables covered by this info</span></span>
+<span>  expectation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2.2</span>, <span class="fl">2.8</span><span class="op">)</span>, <span class="co"># Expectations from this source</span></span>
+<span>  covariance <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>    <span class="fl">0.5</span>, <span class="fl">0.1</span>, <span class="co"># Covariance structure from this source</span></span>
+<span>    <span class="fl">0.1</span>, <span class="fl">0.6</span></span>
+<span>  <span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bl_info</span>, digits<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bl_info</span>, digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Sensor Info </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Expectation:</span></span>
@@ -281,7 +292,7 @@ sources.</p>
 <span><span class="va">bl_adjusted_kinematics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_adjust.html">bl_adjust</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bl_prior</span>, y <span class="op">=</span> <span class="va">bl_info</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print the result of the kinematic adjustment</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bl_adjusted_kinematics</span>, digits<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bl_adjusted_kinematics</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Prior Beliefs_adj_Sensor Info </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Expectation:</span></span>
@@ -342,8 +353,10 @@ and
 <p>We can also calculate the resolution resulting from the kinematic
 adjustment:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Calculate the resolution comparing the prior to the kinematically-adjusted beliefs</span></span>
-<span><span class="va">resolution_values_kinematics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_resolution.html">bl_resolution</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bl_prior</span>, y <span class="op">=</span> <span class="va">bl_adjusted_kinematics</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Calculate the resolution comparing the prior to the </span></span>
+<span><span class="co"># kinematically-adjusted beliefs</span></span>
+<span><span class="va">resolution_values_kinematics</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_resolution.html">bl_resolution</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bl_prior</span>,</span>
+<span>                                              y <span class="op">=</span> <span class="va">bl_adjusted_kinematics</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Print the resolutions</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">resolution_values_kinematics</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
@@ -363,7 +376,7 @@ expectations, values, and sub-matrices of the covariance.</p>
 <code class="sourceCode R"><span><span class="co"># Extract beliefs only for 'x' and 'z' from the data-adjusted object</span></span>
 <span><span class="co"># x: The 'bl' or 'bl_data' object to subset.</span></span>
 <span><span class="co"># varnames: A character vector of variable names to keep.</span></span>
-<span><span class="va">bl_subset_xz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_subset.html">bl_subset</a></span><span class="op">(</span><span class="va">bl_adjusted_data</span>, varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'x'</span>, <span class="st">'z'</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">bl_subset_xz</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_subset.html">bl_subset</a></span><span class="op">(</span><span class="va">bl_adjusted_data</span>, varnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"z"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">bl_subset_xz</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Prior Beliefs_adj_Observations_extract </span></span>
@@ -381,7 +394,7 @@ expectations, values, and sub-matrices of the covariance.</p>
 <span></span>
 <span><span class="co"># Extract data only for 'x' from the original observations</span></span>
 <span><span class="co"># (This is a simple case but demonstrates subsetting bl_data)</span></span>
-<span><span class="va">data_subset_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_subset.html">bl_subset</a></span><span class="op">(</span><span class="va">observed_data</span>, varnames <span class="op">=</span> <span class="st">'x'</span><span class="op">)</span></span>
+<span><span class="va">data_subset_x</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/bl_subset.html">bl_subset</a></span><span class="op">(</span><span class="va">observed_data</span>, varnames <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">data_subset_x</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Observations_extract </span></span>
