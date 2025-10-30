@@ -226,7 +226,7 @@ test_that("bl_resolution: Mixed positive and negative resolutions", {
   result <- bl_resolution(bl_prior, bl_adj)
   
   expect_true(result["A"] > 0)  # Variance reduced
-  expect_equal(result["B"], 0)  # No change
+  expect_equal(as.numeric(result["B"]), 0)  # No change
   expect_true(result["C"] < 0)  # Variance increased
 })
 
@@ -269,8 +269,8 @@ test_that("bl_resolution: Correlated variables", {
   result <- bl_resolution(bl_prior, bl_adj)
   
   # Check only diagonal variances matter for resolution
-  expect_equal(result["A"], 1 - 2/4)
-  expect_equal(result["B"], 1 - 2.5/5)
+  expect_equal(as.numeric(result["A"]), 1 - 2/4)
+  expect_equal(as.numeric(result["B"]), 1 - 2.5/5)
 })
 
 test_that("bl_resolution: Same objects give zero resolution", {
