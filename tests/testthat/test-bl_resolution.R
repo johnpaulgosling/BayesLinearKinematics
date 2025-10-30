@@ -193,3 +193,111 @@ test_that("bl_resolution: Output properties", {
   expect_length(result, 3) # Check length matches number of vars
   expect_named(result, c("A", "B", "C"), ignore.order = FALSE) # Check names and order
 })
+
+# --- Additional Edge Case Tests ---
+
+test_that("bl_resolution: Large number of variables", {
+  n <- 10
+  bl_prior <- create_bl(
+    "Prior", paste0("v", 1:n),
+    rep(0, n), diag(rep(4, n))
+  )
+  bl_adj <- create_bl(
+    "Adjusted", paste0("v", 1:n),
+    rep(1, n), diag(rep(2, n))
+  )
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  expect_length(result, n)
+  expect_true(all(result == 0.5))
+})
+
+test_that("bl_resolution: Mixed positive and negative resolutions", {
+  bl_prior <- create_bl(
+    "P", c("A", "B", "C"),
+    c(0, 0, 0),
+    diag(c(4, 5, 6))
+  )
+  bl_adj <- create_bl(
+    "A", c("A", "B", "C"),
+    c(1, 1, 1),
+    diag(c(2, 5, 8))  # A reduced, B same, C increased
+  )
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  expect_true(result["A"] > 0)  # Variance reduced
+  expect_equal(result["B"], 0)  # No change
+  expect_true(result["C"] < 0)  # Variance increased
+})
+
+test_that("bl_resolution: Perfect resolution (variance to zero)", {
+  bl_prior <- create_bl("P", c("X", "Y"), c(0, 0), diag(c(2, 3)))
+  bl_adj <- create_bl("A", c("X", "Y"), c(1, 1), diag(c(0, 0)))
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  expect_equal(result, setNames(c(1, 1), c("X", "Y")))
+})
+
+test_that("bl_resolution: Small variance changes", {
+  bl_prior <- create_bl("P", "X", 0, 1.0)
+  bl_adj <- create_bl("A", "X", 0.1, 0.99)
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  expect_true(result["X"] > 0)
+  expect_true(result["X"] < 0.1)
+})
+
+test_that("bl_resolution: Very small variances", {
+  bl_prior <- create_bl("P", "X", 0, 1e-6)
+  bl_adj <- create_bl("A", "X", 0, 1e-7)
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  expect_true(result["X"] > 0)
+  expect_true(result["X"] < 1)
+})
+
+test_that("bl_resolution: Correlated variables", {
+  cov_prior <- matrix(c(4, 2, 2, 5), 2, 2)
+  cov_adj <- matrix(c(2, 1, 1, 2.5), 2, 2)
+  
+  bl_prior <- create_bl("P", c("A", "B"), c(0, 0), cov_prior)
+  bl_adj <- create_bl("A", c("A", "B"), c(1, 1), cov_adj)
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  # Check only diagonal variances matter for resolution
+  expect_equal(result["A"], 1 - 2/4)
+  expect_equal(result["B"], 1 - 2.5/5)
+})
+
+test_that("bl_resolution: Same objects give zero resolution", {
+  bl_same <- create_bl("Same", c("X", "Y"), c(1, 2), diag(c(3, 4)))
+  
+  result <- bl_resolution(bl_same, bl_same)
+  
+  expect_equal(result, setNames(c(0, 0), c("X", "Y")))
+})
+
+test_that("bl_resolution: Works with 1x1 matrix covariance", {
+  bl_prior_mat <- create_bl("P", "X", 5, matrix(4, 1, 1))
+  bl_adj_mat <- create_bl("A", "X", 6, matrix(2, 1, 1))
+  
+  result <- bl_resolution(bl_prior_mat, bl_adj_mat)
+  
+  expect_equal(result, setNames(0.5, "X"))
+})
+
+test_that("bl_resolution: Handles very large resolutions", {
+  bl_prior <- create_bl("P", "X", 0, 100)
+  bl_adj <- create_bl("A", "X", 0.1, 0.1)
+  
+  result <- bl_resolution(bl_prior, bl_adj)
+  
+  expect_true(result["X"] > 0.99)
+  expect_true(result["X"] <= 1)
+})
