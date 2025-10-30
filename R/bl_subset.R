@@ -50,9 +50,14 @@ bl_subset <- function(x,
       function(x_names) which(x@varnames %in% x_names)
     )
     y_expectation <- x@expectation[x_indices]
-    y_variance <- x@covariance[x_indices, x_indices,
-      drop = FALSE
-    ]
+    
+    # Handle scalar vs matrix covariance
+    if (is.matrix(x@covariance)) {
+      y_variance <- x@covariance[x_indices, x_indices, drop = FALSE]
+    } else {
+      # Scalar covariance case (single variable)
+      y_variance <- x@covariance
+    }
 
     # Set up new bl object with extracted mean and variance
     y <- bl(

@@ -204,3 +204,91 @@ test_that("bl_adjust: Error Handling - Variable Mismatch", {
   expect_error(bl_adjust(x, y_data_wrong_vars), class = "simpleError")
   expect_error(bl_adjust(x, y_bl_wrong_vars), class = "simpleError")
 })
+
+# --- Additional Edge Case Tests ---
+
+test_that("bl_adjust: Single variable adjustment with bl_data", {
+  x <- create_bl("x", "A", 10, 4)
+  y <- create_bl_data("y", "A", 12)
+  
+  xy <- bl_adjust(x, y)
+  
+  expect_s4_class(xy, "bl")
+  expect_equal(xy@varnames, "A")
+  expect_equal(xy@name, "x_adj_y")
+})
+
+test_that("bl_adjust: Adjustment preserves variable order", {
+  x <- create_bl(
+    "x", c("C", "A", "B"),
+    c(1, 2, 3),
+    matrix(c(1, 0.2, 0.1, 0.2, 1, 0.3, 0.1, 0.3, 1), 3, 3)
+  )
+  y <- create_bl_data("y", c("A", "C"), c(2.5, 1.5))
+  
+  xy <- bl_adjust(x, y)
+  
+  expect_equal(xy@varnames, c("C", "A", "B"))
+})
+
+test_that("bl_adjust: Adjusting subset of variables", {
+  x <- create_bl(
+    "x", c("A", "B", "C", "D"),
+    c(0, 0, 0, 0),
+    diag(4)
+  )
+  y <- create_bl_data("y", c("B", "C"), c(1, 2))
+  
+  xy <- bl_adjust(x, y)
+  
+  expect_s4_class(xy, "bl")
+  expect_equal(length(xy@varnames), 4)
+  expect_equal(xy@varnames, c("A", "B", "C", "D"))
+})
+
+test_that("bl_adjust: Adjustment with bl object (kinematics)", {
+  x <- create_bl(
+    "prior", c("A", "B"),
+    c(0, 0),
+    matrix(c(1, 0.5, 0.5, 1), 2, 2)
+  )
+  y <- create_bl(
+    "info", c("A", "B"),
+    c(1, 2),
+    matrix(c(0.5, 0.1, 0.1, 0.5), 2, 2)
+  )
+  
+  xy <- bl_adjust(x, y)
+  
+  expect_s4_class(xy, "bl")
+  expect_equal(xy@name, "prior_adj_info")
+  expect_equal(xy@varnames, c("A", "B"))
+})
+
+test_that("bl_adjust: Adjustment with zero covariance in data", {
+  x <- create_bl(
+    "x", c("A", "B"),
+    c(1, 2),
+    matrix(c(1, 0.5, 0.5, 1), 2, 2)
+  )
+  y <- create_bl_data("y", "A", 1.5)
+  
+  xy <- bl_adjust(x, y)
+  
+  # Should complete without error
+  expect_s4_class(xy, "bl")
+})
+
+test_that("bl_adjust: Returns symmetric covariance", {
+  x <- create_bl(
+    "x", c("A", "B", "C"),
+    c(1, 2, 3),
+    matrix(c(1, 0.3, 0.2, 0.3, 1, 0.4, 0.2, 0.4, 1), 3, 3)
+  )
+  y <- create_bl_data("y", c("A", "B"), c(1.5, 2.5))
+  
+  xy <- bl_adjust(x, y)
+  
+  # Check covariance is symmetric
+  expect_true(isSymmetric(xy@covariance))
+})

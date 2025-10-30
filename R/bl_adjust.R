@@ -77,19 +77,27 @@ bl_adjust <- function(x,
       function(x_names) which(x@varnames %in% x_names)
     )
     y_expectation <- x@expectation[x_indices]
-    y_variance <- x@covariance[x_indices, x_indices]
-    xy_covariance <- x@covariance[, x_indices]
+    
+    # Handle scalar vs matrix covariance
+    if (is.matrix(x@covariance)) {
+      y_variance <- x@covariance[x_indices, x_indices, drop = FALSE]
+      xy_covariance <- x@covariance[, x_indices, drop = FALSE]
+    } else {
+      # Scalar covariance case (single variable)
+      y_variance <- x@covariance
+      xy_covariance <- x@covariance
+    }
 
     # Invert prior variance for y (using generalised inverse from MASS)
-    inv_y_variance <- ginv(y_variance)
+    inv_y_variance <- ginv(as.matrix(y_variance))
 
     # Adjusted expectation
     adj_expectation <- x@expectation +
-      xy_covariance %*% inv_y_variance %*% (y@values - y_expectation)
+      as.matrix(xy_covariance) %*% inv_y_variance %*% (y@values - y_expectation)
 
     # Adjusted variance
-    adj_variance <- x@covariance -
-      xy_covariance %*% inv_y_variance %*% t(xy_covariance)
+    adj_variance <- as.matrix(x@covariance) -
+      as.matrix(xy_covariance) %*% inv_y_variance %*% t(as.matrix(xy_covariance))
 
     # Set up new bl object with adjusted mean and variance
     x_adj_y <- bl(
@@ -109,22 +117,30 @@ bl_adjust <- function(x,
     # Pick out mean and covariance from x that corresponds with y
     x_indices <- which(x@varnames %in% y@varnames)
     y_expectation <- x@expectation[x_indices]
-    y_variance <- x@covariance[x_indices, x_indices]
-    xy_covariance <- x@covariance[, x_indices]
+    
+    # Handle scalar vs matrix covariance
+    if (is.matrix(x@covariance)) {
+      y_variance <- x@covariance[x_indices, x_indices, drop = FALSE]
+      xy_covariance <- x@covariance[, x_indices, drop = FALSE]
+    } else {
+      # Scalar covariance case (single variable)
+      y_variance <- x@covariance
+      xy_covariance <- x@covariance
+    }
 
     # Invert prior variance for y (using generalised inverse from MASS)
-    inv_y_variance <- ginv(y_variance)
+    inv_y_variance <- ginv(as.matrix(y_variance))
 
     # Create vector multiplier
-    cov_var_mult <- xy_covariance %*% inv_y_variance
+    cov_var_mult <- as.matrix(xy_covariance) %*% inv_y_variance
 
     # Adjusted expectation
     adj_expectation <- x@expectation +
       cov_var_mult %*% (y@expectation - y_expectation)
 
     # Adjusted variance
-    adj_variance <- x@covariance - cov_var_mult %*% t(xy_covariance) +
-      cov_var_mult %*% y@covariance %*% t(cov_var_mult)
+    adj_variance <- as.matrix(x@covariance) - cov_var_mult %*% t(as.matrix(xy_covariance)) +
+      cov_var_mult %*% as.matrix(y@covariance) %*% t(cov_var_mult)
 
     # Set up new bl object with adjusted mean and variance
     x_adj_y <- bl(
