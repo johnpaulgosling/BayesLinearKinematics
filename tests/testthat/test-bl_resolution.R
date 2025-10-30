@@ -177,8 +177,9 @@ test_that("bl_resolution: Error Handling - Non-positive Prior Variance", {
   )
   
   # Note: Negative variance test is not included because the bl class
-  # validation prevents creating objects with negative variance.
-  # The zero variance case above is sufficient to test the error handling.
+  # validity function (R/bl.R lines 119-122) prevents creating objects 
+  # with negative covariance values. The zero variance case above is 
+  # sufficient to test the error handling in bl_resolution.
 })
 
 test_that("bl_resolution: Output properties", {
