@@ -1,3 +1,39 @@
+# BayesLinearKinematics 0.2.14 (2026-01-16)
+
+## MAJOR CHANGES
+
+* None
+
+## NEW FEATURES
+
+* Added extensive additional test coverage for data type validation and error handling.
+
+## BUG FIXES
+
+* None
+
+## DEPRECATED FEATURES
+
+* None
+
+# BayesLinearKinematics 0.2.13 (2025-10-30)
+
+## MAJOR CHANGES
+
+* None
+
+## NEW FEATURES
+
+* None
+
+## BUG FIXES
+
+* None
+
+## DEPRECATED FEATURES
+
+* None
+
 # BayesLinearKinematics 0.2.12 (2025-07-08)
 
 ## MAJOR CHANGES
