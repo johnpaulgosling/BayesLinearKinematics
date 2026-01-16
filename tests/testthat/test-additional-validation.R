@@ -157,6 +157,7 @@ test_that("bl: Rejects data.frame for covariance", {
 test_that("bl: Currently accepts Inf in expectation (not validated)", {
   # Note: Current implementation does not check for Inf, only NA
   # This test documents current behavior
+  # WARNING: Inf values may cause issues in downstream mathematical operations
   obj <- bl(
     name = "test",
     varnames = c("x", "y"),
@@ -170,7 +171,8 @@ test_that("bl: Currently accepts Inf in expectation (not validated)", {
 test_that("bl: Currently accepts Inf in covariance (not validated)", {
   # Note: Current implementation only checks for NA, not Inf
   # This test documents current behavior - Inf is technically not NA
-  # but may cause issues in mathematical operations
+  # WARNING: Inf in covariance may cause issues in mathematical operations
+  # such as matrix inversions, decompositions, or Bayes linear adjustments
   obj <- bl(
     name = "test",
     varnames = c("x", "y"),
