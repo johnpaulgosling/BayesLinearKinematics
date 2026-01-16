@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">BayesLinearKinematics</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,9 +77,9 @@ these beliefs based on observed data or other uncertain information
 (kinematics). This vignette demonstrates the core workflow: defining
 prior beliefs, structuring observed data, performing adjustments, and
 evaluating the result.</p>
-<p>Note that this vignette was created using R version R version 4.5.1
-(2025-06-13) and the <code>BayesLinearKinematics</code> package version
-0.2.13.</p>
+<p>Note that this vignette was created using R version R version 4.5.2
+(2025-10-31) and the <code>BayesLinearKinematics</code> package version
+0.2.14.</p>
 </div>
 <div class="section level2">
 <h2 id="defining-prior-beliefs-with-bl">1. Defining Prior Beliefs with <code>bl</code><a class="anchor" aria-label="anchor" href="#defining-prior-beliefs-with-bl"></a>
@@ -142,7 +142,7 @@ defined for the <code>bl</code> class:</p>
 <span><span class="co"># This method should handle the visualization details internally.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bl_prior</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="BayesLinearKinematics_intro_files/figure-html/plot_bl_prior-1.png" alt="Plot of the prior covariance matrix." width="672"><p class="caption">
+<img src="BayesLinearKinematics_intro_files/figure-html/plot_bl_prior-1.png" class="r-plt" alt="Plot of the prior covariance matrix." width="672"><p class="caption">
 Plot of the prior covariance matrix.
 </p>
 </div>
@@ -233,7 +233,7 @@ Let’s plot the adjusted covariance:</p>
 <code class="sourceCode R"><span><span class="co"># Plot the adjusted covariance matrix</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bl_adjusted_data</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<img src="BayesLinearKinematics_intro_files/figure-html/plot_bl_adjusted_data-1.png" alt="Plot of the covariance matrix after adjustment with data." width="672"><p class="caption">
+<img src="BayesLinearKinematics_intro_files/figure-html/plot_bl_adjusted_data-1.png" class="r-plt" alt="Plot of the covariance matrix after adjustment with data." width="672"><p class="caption">
 Plot of the covariance matrix after adjustment with data.
 </p>
 </div>
@@ -310,7 +310,7 @@ sources.</p>
 <span></span>
 <span><span class="co"># Plot the resulting covariance after kinematic adjustment</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bl_adjusted_kinematics</span><span class="op">)</span></span></code></pre></div>
-<p><img src="BayesLinearKinematics_intro_files/figure-html/adjust_beliefs_kinematics-1.png" width="672"></p>
+<p><img src="BayesLinearKinematics_intro_files/figure-html/adjust_beliefs_kinematics-1.png" class="r-plt" alt="" width="672"></p>
 <p>The adjustment incorporates the information from <code>bl_info</code>
 into the prior beliefs, updating both expectations and covariances
 according to Bayes linear rules for combining uncertain information.</p>
@@ -432,7 +432,7 @@ arguments.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
