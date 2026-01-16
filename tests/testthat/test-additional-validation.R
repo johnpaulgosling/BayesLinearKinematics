@@ -158,10 +158,13 @@ test_that("bl: Rejects data.frame for covariance", {
   )
 })
 
-test_that("bl: Currently accepts Inf in expectation (not validated)", {
-  # Note: Current implementation does not check for Inf, only NA
-  # This test documents current behavior
-  # WARNING: Inf values may cause issues in downstream mathematical operations
+test_that("bl: Currently accepts Inf in expectation (documented behavior)", {
+  # The bl validity function only validates NA values, not Inf
+  # This documents current implementation behavior:
+  # - Inf in expectations is technically valid (not checked)
+  # - May indicate modeling issues (unbounded beliefs)
+  # - Will propagate through Bayes linear adjustments
+  # Future enhancement: Consider adding is.finite() validation
   obj <- bl(
     name = "test",
     varnames = c("x", "y"),
